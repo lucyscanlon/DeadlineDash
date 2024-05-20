@@ -22,6 +22,22 @@ let showerNeedHeight;
 let fridgeNeedHeight;
 let socialNeedHeight;
 
+let duckDirection;
+let duckXCoord;
+let duckYCoord;
+
+let numberOfClicks;
+
+let bedDuckX;
+let bedDuckY;
+
+let isMoving;
+
+let toMoveX;
+let toMoveY;
+
+let toggleDirection;
+
 function preload() {
     dayImg = loadImage('img/day.PNG');
     nightImg = loadImage('img/night.PNG');
@@ -77,6 +93,24 @@ function setup() {
     showerNeedHeight = 90;
     fridgeNeedHeight = 90;
     socialNeedHeight = 90;
+
+    duckDirection = 'front';
+
+    numberOfClicks = 0;
+
+    duckStartingX = 250;
+    duckStartingY = 320;
+
+    duckXCoord = 250;
+    duckYCoord = 320;
+
+    bedDuckX = 140;
+    bedDuckY = 433;
+
+    isMoving = false;
+
+    toggleDirection = 0;
+
 }
 
 // draw function 
@@ -122,6 +156,10 @@ function draw() {
 
     decreaseNeeds();
 
+    moveDuck();
+
+    makeFirstNotificationActive();
+
 }
 
 function passTime() {
@@ -153,9 +191,13 @@ function mouseClicked() {
     if(((mouseX >= 0) && (mouseX <= 451)) && ((mouseY >=476) && (mouseY <= 700))) {
         console.log("Bed clicked");
 
-        var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + bedTimeout};
+        var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 148, YCoord: 394, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
+
+        isMoving = true;
+
+        numberOfClicks = numberOfClicks + 1;
 
         console.log(notificationArray);
         console.log(previousEndTime);
@@ -163,18 +205,50 @@ function mouseClicked() {
 
     if(((mouseX >= 509) && (mouseX <= 690)) && ((mouseY >= 554) && (mouseY <= 700))) {
         console.log("Door clicked");
+
+        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 492, YCoord: 698, active: false};
+        notificationArray.push(newNotification);
+        previousEndTime = newNotification.endTime;
+
+        isMoving = true;
+
+        numberOfClicks = numberOfClicks + 1;
     }
 
     if(((mouseX >=106) && (mouseX <= 221)) && ((mouseY >= 147) && (mouseY <= 253))) {
         console.log("laptop clicked");
+
+        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 130, YCoord: 276, active: false};
+        notificationArray.push(newNotification);
+        previousEndTime = newNotification.endTime;
+
+        isMoving = true;
+
+        numberOfClicks = numberOfClicks + 1;
     }
 
     if(((mouseX >= 319) && (mouseX <= 438)) && ((mouseY >= 151) && (mouseY <= 347))) {
         console.log("fridge clicked");
+
+        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 314, YCoord: 264, active: false};
+        notificationArray.push(newNotification);
+        previousEndTime = newNotification.endTime;
+
+        isMoving = true;
+
+        numberOfClicks = numberOfClicks + 1;
     }
 
     if(((mouseX >= 551) && (mouseX <= 700)) && ((mouseY >= 0) && (mouseY <= 288))) {
         console.log("shower clicked");
+
+        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 604, YCoord: 306, active: false};
+        notificationArray.push(newNotification);
+        previousEndTime = newNotification.endTime;
+
+        numberOfClicks = numberOfClicks + 1;
+
+        isMoving = true;
     }
 
     // action queue - notification 1
@@ -206,6 +280,7 @@ function mouseClicked() {
     }
     
     console.log("X: " + mouseX + ", Y: " + mouseY);
+
 }
 
 function drawActionQueue() {
@@ -305,5 +380,100 @@ function drawDuck() {
     
     noTint();
     fill(255);
-    image(duckFront, 250, 320, 130, 130);
+
+    if(duckDirection === 'front') {
+        image(duckFront, duckXCoord, duckYCoord, 130, 130);
+    } else if (duckDirection === 'left') {
+        image(duckLeft, duckXCoord, duckYCoord, 130, 130);
+    } else if (duckDirection === 'right') {
+        image(duckRight, duckXCoord, duckYCoord, 130, 130);
+    } else if (duckDirection === 'back') {
+        image(duckBack, duckXCoord, duckYCoord, 130, 130);
+    }
+
 }
+
+function moveDuck() {
+
+    if(duckYCoord === 698) {
+        toggleDirection = 1;
+    }
+
+    if(isMoving === true) {
+
+        if(toggleDirection === 0) {
+            if(duckXCoord >= toMoveX) {
+                if(duckXCoord >= toMoveX) {
+                    duckXCoord = duckXCoord - 2;
+                    duckDirection = 'left';
+                }
+            } else if (duckXCoord <= toMoveX) {
+                if(duckXCoord <= toMoveX) {
+                    duckXCoord = duckXCoord + 2;
+                    duckDirection = 'right';
+                }
+            }
+        }
+
+        if(duckXCoord === toMoveX) {
+            toggleDirection = 1;
+        }
+
+        if(toggleDirection === 1) {
+            if(duckYCoord >= toMoveY) {
+                duckYCoord = duckYCoord - 2;
+                duckDirection = 'back';
+            } else if (duckYCoord <= toMoveY) {
+                duckYCoord = duckYCoord + 2;
+                duckDirection = 'front';
+            }
+        }
+
+        if(duckYCoord === toMoveY) {
+
+            if(notificationArray < 1) {
+                isMoving = false;
+                
+            }
+
+            toggleDirection = 0;
+            duckXCoord = toMoveX;
+            duckYCoord = toMoveY;
+
+            if((duckYCoord === 394) || (duckYCoord === 698) || (duckYCoord === 698)) {
+                duckDirection = 'front';
+            } else if ((duckYCoord === 276) || (duckYCoord === 264)) {
+                duckDirection = 'back';
+            }
+            
+            
+            
+        }
+
+} else if (isMoving === false) {
+    if((duckYCoord === 394) || (duckYCoord === 698) || (duckYCoord === 698)) {
+        duckDirection = 'front';
+    } else if ((duckYCoord === 276) || (duckYCoord === 264)) {
+        duckDirection = 'back';
+    }
+}
+
+
+    
+}
+
+function makeFirstNotificationActive() {
+
+    if(notificationArray.length > 0) {
+        notificationArray[0].active = true;
+        toMoveX = notificationArray[0].XCoord;
+        toMoveY = notificationArray[0].YCoord;
+    
+    }
+
+    if(notificationArray.length > 1) {
+        isMoving = true;
+    }
+    
+}
+
