@@ -46,6 +46,8 @@ let toMoveY;
 
 let toggleDirection;
 
+let previousAction;
+
 function preload() {
     dayImg = loadImage('img/day.PNG');
     nightImg = loadImage('img/night.PNG');
@@ -131,6 +133,8 @@ function setup() {
     showerModFrameRate = 100;
     fridgeModFrameRate = 80;
     socialModFrameRate = 200;
+
+    previousAction = 0;
 
 }
 
@@ -235,7 +239,7 @@ function mouseClicked() {
     if(((mouseX >= 509) && (mouseX <= 690)) && ((mouseY >= 554) && (mouseY <= 700))) {
         console.log("Door clicked");
 
-        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: doorDuckX, YCoord: doorDuckY, active: false};
+        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: doorDuckX, YCoord: doorDuckY, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -247,7 +251,7 @@ function mouseClicked() {
     if(((mouseX >=106) && (mouseX <= 221)) && ((mouseY >= 147) && (mouseY <= 253))) {
         console.log("laptop clicked");
 
-        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: laptopDuckX, YCoord: laptopDuckY, active: false};
+        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: laptopDuckX, YCoord: laptopDuckY, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -259,7 +263,7 @@ function mouseClicked() {
     if(((mouseX >= 319) && (mouseX <= 438)) && ((mouseY >= 151) && (mouseY <= 347))) {
         console.log("fridge clicked");
 
-        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: fridgeDuckX, YCoord: fridgeDuckY, active: false};
+        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: fridgeDuckX, YCoord: fridgeDuckY, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -271,7 +275,7 @@ function mouseClicked() {
     if(((mouseX >= 551) && (mouseX <= 700)) && ((mouseY >= 0) && (mouseY <= 288))) {
         console.log("shower clicked");
 
-        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: showerDuckX, YCoord: showerDuckY, active: false};
+        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: showerDuckX, YCoord: showerDuckY, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -283,7 +287,7 @@ function mouseClicked() {
     // action queue - notification 1
     if(((mouseX >= 9) && (mouseX <= 90)) && ((mouseY >= 28) && (mouseY <= 110))) {
         console.log("notification one pressed");
-
+        previousAction = notificationArray[0].type;
         notificationArray.splice(0, 1);
         
     }
@@ -291,21 +295,21 @@ function mouseClicked() {
     // notification 2
     if(((mouseX >= 109) && (mouseX <= 190)) && ((mouseY >= 30) && (mouseY <= 110))) {
         console.log("notification two pressed");
-
+        previousAction = notificationArray[0].type;
         notificationArray.splice(1, 1);
     }
 
     // notification 3
     if(((mouseX >= 211) && (mouseX <= 289)) && ((mouseY >= 30) && (mouseY <= 110))) {
         console.log("notification three pressed");
-
+        previousAction = notificationArray[0].type;
         notificationArray.splice(2, 1);
     }
 
     // notification 4
     if(((mouseX >= 310) && (mouseX <= 389)) && ((mouseY >= 30) && (mouseY <= 110))) {
         console.log("notification four pressed");
-
+        previousAction = notificationArray[0].type;
         notificationArray.splice(3, 1);
     }
     
@@ -337,6 +341,7 @@ function timeoutNotifications() {
 
     for(let i = 0; i < notificationTimeouts.length; i++) {
         if(frameCount === notificationTimeouts[i]) {
+            previousAction = notificationArray[0];
             notificationArray.splice(i, 1);
         }
     }
@@ -488,43 +493,42 @@ function drawDuck() {
 
 function moveDuck() {
 
-    if((duckYCoord === doorDuckY) && (isMoving === true)) {
-        moveDuckFromDoor();
-
-        function moveDuckFromDoor() {
-
+    if(isMoving === true && (previousAction === 2)) {
+            moveDuckFromDoor();
+    
+            function moveDuckFromDoor() {
+            
             console.log("CALLED");
-
+            
             toggleDirection = 1;
-
-            if(duckYCoord >= 352) {
+            
+            if(duckYCoord >= 348) {
                 duckYCoord = duckYCoord - 4;
             }
 
+            if(duckYCoord === 348) {
+                previousAction = 1;
+                isMoving = true;
+                toggleDirection = 0;
+
+            }
+            
         }
-    } 
-
-    if(duckYCoord === 352) {
-
-        toggleDirection = 0;
-        moveDuckXAxis();
-        moveDuckYAxis();
+} else if ((isMoving === true) && (previousAction !== 2)) {
+    toggleDirection = 0;
+    moveDuckXAxis();
+    moveDuckYAxis();         
+} else if (isMoving === false) {
+    if((duckYCoord === bedDuckY) || (duckYCoord === doorDuckY)) {
+        duckDirection = 'front';
+    } else if ((duckYCoord === laptopDuckY) || (duckYCoord === fridgeDuckY) || (duckYCoord === showerDuckY)) {
+        duckDirection = 'back';
     }
+}
+     
 
-
-    if((isMoving === true) && (duckYCoord !== doorDuckY)) {
-
-        moveDuckXAxis();
-        moveDuckYAxis();
-        
-
-    } else if (isMoving === false) {
-        if((duckYCoord === bedDuckY) || (duckYCoord === doorDuckY)) {
-            duckDirection = 'front';
-        } else if ((duckYCoord === laptopDuckY) || (duckYCoord === fridgeDuckY) || (duckYCoord === showerDuckY)) {
-            duckDirection = 'back';
-        }
-    }
+    console.log(previousAction);
+    console.log(isMoving);
     
 }
 
@@ -630,7 +634,11 @@ function increaseStats() {
     if(((notificationArray.length > 0 && frameCount > 200))) {
         if(bedNeedHeight === 200) {
             if(notificationArray[0].type === 1) {
+
+                previousAction = notificationArray[0].type;
                 notificationArray.splice(0, 1);
+
+                
 
                 if(notificationArray.length > 0) {
                     notificationArray[0].startTime = frameCount;
@@ -640,6 +648,7 @@ function increaseStats() {
 
         if(showerNeedHeight === 200) {
             if(notificationArray[0].type === 5) {
+                previousAction = notificationArray[0].type;
                 notificationArray.splice(0, 1);
 
                 if(notificationArray.length > 0) {
@@ -650,6 +659,7 @@ function increaseStats() {
 
         if(fridgeNeedHeight === 200) {
             if(notificationArray[0].type === 4) {
+                previousAction = notificationArray[0].type;
                 notificationArray.splice(0, 1);
 
                 if(notificationArray.length > 0) {
@@ -660,6 +670,7 @@ function increaseStats() {
 
         if(socialNeedHeight === 200) {
             if(notificationArray[0].type === 2) {
+                previousAction = notificationArray[0].type;
                 notificationArray.splice(0, 1);
 
                 if(notificationArray.length > 0) {
