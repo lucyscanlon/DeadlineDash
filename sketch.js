@@ -84,15 +84,15 @@ function setup() {
     notificationArray = [];
     notificationTimeouts = [];
 
-    bedTimeout = 400;
+    bedTimeout = 100;
     showerTimeout = 250;
     socialTimeout = 300;
-    fridgeTimeout = 100;
+    fridgeTimeout = 40;
 
-    bedNeedHeight = 90;
-    showerNeedHeight = 90;
-    fridgeNeedHeight = 90;
-    socialNeedHeight = 90;
+    bedNeedHeight = 200;
+    showerNeedHeight = 200;
+    fridgeNeedHeight = 200;
+    socialNeedHeight = 200;
 
     duckDirection = 'front';
 
@@ -110,6 +110,11 @@ function setup() {
     isMoving = false;
 
     toggleDirection = 0;
+
+    bedModFrameRate = 200;
+    showerModFrameRate = 100;
+    fridgeModFrameRate = 80;
+    socialModFrameRate = 200;
 
 }
 
@@ -160,6 +165,8 @@ function draw() {
 
     makeFirstNotificationActive();
 
+    increaseStats();
+
 }
 
 function passTime() {
@@ -187,11 +194,13 @@ function passTime() {
 
 function mouseClicked() {
 
+    console.log(200 - bedNeedHeight);
+
     // objects 
     if(((mouseX >= 0) && (mouseX <= 451)) && ((mouseY >=476) && (mouseY <= 700))) {
         console.log("Bed clicked");
 
-        var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 148, YCoord: 394, active: false};
+        var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: 148, YCoord: 394, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -199,14 +208,16 @@ function mouseClicked() {
 
         numberOfClicks = numberOfClicks + 1;
 
-        console.log(notificationArray);
-        console.log(previousEndTime);
+        console.log(notificationArray[0]);
+
+        //console.log(notificationArray);
+        //console.log(previousEndTime);
     } 
 
     if(((mouseX >= 509) && (mouseX <= 690)) && ((mouseY >= 554) && (mouseY <= 700))) {
         console.log("Door clicked");
 
-        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 492, YCoord: 698, active: false};
+        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: 492, YCoord: 698, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -218,7 +229,7 @@ function mouseClicked() {
     if(((mouseX >=106) && (mouseX <= 221)) && ((mouseY >= 147) && (mouseY <= 253))) {
         console.log("laptop clicked");
 
-        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 130, YCoord: 276, active: false};
+        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: 130, YCoord: 276, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -230,7 +241,7 @@ function mouseClicked() {
     if(((mouseX >= 319) && (mouseX <= 438)) && ((mouseY >= 151) && (mouseY <= 347))) {
         console.log("fridge clicked");
 
-        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 314, YCoord: 264, active: false};
+        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: 314, YCoord: 264, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -242,7 +253,7 @@ function mouseClicked() {
     if(((mouseX >= 551) && (mouseX <= 700)) && ((mouseY >= 0) && (mouseY <= 288))) {
         console.log("shower clicked");
 
-        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + bedTimeout, XCoord: 604, YCoord: 306, active: false};
+        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: 562, YCoord: 262, active: false};
         notificationArray.push(newNotification);
         previousEndTime = newNotification.endTime;
 
@@ -256,6 +267,7 @@ function mouseClicked() {
         console.log("notification one pressed");
 
         notificationArray.splice(0, 1);
+        
     }
 
     // notification 2
@@ -321,55 +333,118 @@ function addEndTime() {
 }
 
 function drawNeedsPanel() {
-    fill(100, 200, 255);
-    rect(700, 0, 270, 310);
+    fill(243, 214, 145);
+    rect(700, 0, 270, 330);
 
+    // white bars
     fill(255);
-    textSize(20);
-    text("Needs:", 730, 40);
+    rect(720, 94, 45, 200);
+    rect(778, 94, 45, 200);
+    rect(838, 94, 45, 200);
+    rect(895, 94, 45, 200);
 
-    fill(100, 100, 255);
-    rect(730, 60, 90, 90, 10);
-    rect(840, 60, 90, 90, 10);
-    rect(730, 170, 90, 90, 10);
-    rect(840, 170, 90, 90, 10);
+     // status 
+     fill(214, 94, 209, 120);
 
-    fill(0, 255, 0, 100);
-    rect(730, 60 + (90 - bedNeedHeight), 90, bedNeedHeight, 10);
-    rect(840, 60 + (90 - showerNeedHeight), 90, showerNeedHeight, 10);
-    rect(730, 170 + (90 - fridgeNeedHeight), 90, fridgeNeedHeight, 10);
-    rect(840, 170 + (90 - socialNeedHeight), 90, socialNeedHeight, 10);
+     rect(720, 94 + (200 - showerNeedHeight), 45, showerNeedHeight);
+     rect(778, 94 + (200 - fridgeNeedHeight), 45, fridgeNeedHeight);
+     rect(838, 94 + (200 - bedNeedHeight), 45, bedNeedHeight);
+     rect(895, 94 + (200 - socialNeedHeight), 45, socialNeedHeight);
 
-    fill(255);
-    text("bed", 751, 100);
-    text("shower", 868, 100);
-    text("fridge", 754, 214);
-    text("social", 859, 214);
+    // black outlines 
+    fill(72, 36, 69);
+
+    // rect 1
+    rect(720, 94, 4, 200);
+    rect(764, 94, 4, 200);
+    rect(720, 94, 45, 4);
+    rect(723, 290, 45, 4);
+
+
+    // rect 2
+    rect(778, 94, 4, 200);
+    rect(823, 94, 4, 200);
+    rect(778, 94, 45, 4);
+    rect(778, 290, 45, 4);
+
+    // rect 3
+    rect(838, 94, 4, 200);
+    rect(883, 94, 4, 200);
+    rect(838, 94, 45, 4);
+    rect(838, 290, 45, 4);
+
+    // rect 4
+    rect(895, 94, 4, 200);
+    rect(940, 94, 4, 200);
+    rect(895, 94, 45, 4);
+    rect(895, 290, 45, 4);
+
+
+    fill(0);
+    textFont('Courier New');
+    textStyle(BOLD)
+    angleMode(DEGREES);
+    textSize(23);
+
+    push();
+    translate(749, 278);
+    rotate(-90);
+    text("Hygiene", 0, 0);
+    pop();
+
+    push();
+    translate(807, 278);
+    rotate(-90);
+    text("Hunger", 0, 0);
+    pop();
+
+    push();
+    translate(868, 278);
+    rotate(-90);
+    text("Sleep", 0, 0);
+    pop();
+
+    push();
+    translate(925, 278);
+    rotate(-90);
+    text("Social", 0, 0);
+    pop();
+
+    text("Needs status:", 746, 62);
+
 }
 
 function decreaseNeeds() {
 
-    if(frameCount % 80 === 0) {
-        if(bedNeedHeight > 0) {
-            bedNeedHeight = bedNeedHeight - 10;
+    if(duckYCoord !== 394) {
+        if(frameCount % bedModFrameRate === 0) {
+            if(bedNeedHeight > 0) {
+                bedNeedHeight = bedNeedHeight - 10;
+            }
         }
     }
 
-    if(frameCount % 40 === 0) {
-        if(showerNeedHeight > 0) {
-            showerNeedHeight = showerNeedHeight - 10;
+    if(duckYCoord !== 262) {
+        if(frameCount % showerModFrameRate === 0) {
+            if(showerNeedHeight > 0) {
+                showerNeedHeight = showerNeedHeight - 10;
+            }
         }
     }
 
-    if(frameCount % 60 === 0) {
-        if(fridgeNeedHeight > 0) {
-            fridgeNeedHeight = fridgeNeedHeight - 10;
+    if(duckYCoord !== 264) {
+        if(frameCount % fridgeModFrameRate === 0) {
+            if(fridgeNeedHeight > 0) {
+                fridgeNeedHeight = fridgeNeedHeight - 10;
+            }
         }
     }
 
-    if(frameCount % 90 === 0) {
-        if(socialNeedHeight > 0) {
-            socialNeedHeight = socialNeedHeight - 10;
+    if(duckYCoord !== 698) {
+        if(frameCount % socialModFrameRate === 0) {
+            if(socialNeedHeight > 0) {
+                socialNeedHeight = socialNeedHeight - 10;
+            }
         }
     }
 
@@ -395,70 +470,43 @@ function drawDuck() {
 
 function moveDuck() {
 
-    if(duckYCoord === 698) {
-        toggleDirection = 1;
-    }
+    if((duckYCoord === 698) && (isMoving === true)) {
+        moveDuckFromDoor();
 
-    if(isMoving === true) {
+        function moveDuckFromDoor() {
 
-        if(toggleDirection === 0) {
-            if(duckXCoord >= toMoveX) {
-                if(duckXCoord >= toMoveX) {
-                    duckXCoord = duckXCoord - 2;
-                    duckDirection = 'left';
-                }
-            } else if (duckXCoord <= toMoveX) {
-                if(duckXCoord <= toMoveX) {
-                    duckXCoord = duckXCoord + 2;
-                    duckDirection = 'right';
-                }
-            }
-        }
+            console.log("CALLED");
 
-        if(duckXCoord === toMoveX) {
             toggleDirection = 1;
-        }
 
-        if(toggleDirection === 1) {
-            if(duckYCoord >= toMoveY) {
+            if(duckYCoord >= 352) {
                 duckYCoord = duckYCoord - 2;
-                duckDirection = 'back';
-            } else if (duckYCoord <= toMoveY) {
-                duckYCoord = duckYCoord + 2;
-                duckDirection = 'front';
             }
+
         }
+    } 
 
-        if(duckYCoord === toMoveY) {
+    if(duckYCoord === 352) {
 
-            if(notificationArray < 1) {
-                isMoving = false;
-                
-            }
-
-            toggleDirection = 0;
-            duckXCoord = toMoveX;
-            duckYCoord = toMoveY;
-
-            if((duckYCoord === 394) || (duckYCoord === 698) || (duckYCoord === 698)) {
-                duckDirection = 'front';
-            } else if ((duckYCoord === 276) || (duckYCoord === 264)) {
-                duckDirection = 'back';
-            }
-            
-            
-            
-        }
-
-} else if (isMoving === false) {
-    if((duckYCoord === 394) || (duckYCoord === 698) || (duckYCoord === 698)) {
-        duckDirection = 'front';
-    } else if ((duckYCoord === 276) || (duckYCoord === 264)) {
-        duckDirection = 'back';
+        toggleDirection = 0;
+        moveDuckXAxis();
+        moveDuckYAxis();
     }
-}
 
 
+    if((isMoving === true) && (duckYCoord !== 698)) {
+
+        moveDuckXAxis();
+        moveDuckYAxis();
+        
+
+    } else if (isMoving === false) {
+        if((duckYCoord === 394) || (duckYCoord === 698)) {
+            duckDirection = 'front';
+        } else if ((duckYCoord === 276) || (duckYCoord === 264) || (duckYCoord === 306)) {
+            duckDirection = 'back';
+        }
+    }
     
 }
 
@@ -471,9 +519,135 @@ function makeFirstNotificationActive() {
     
     }
 
-    if(notificationArray.length > 1) {
+    if(notificationArray.length > 0) {
         isMoving = true;
+    } else {
+        isMoving = false;
     }
     
+}
+
+function moveDuckXAxis() {
+    if(toggleDirection === 0) {
+        if(duckXCoord >= toMoveX) {
+            if(duckXCoord >= toMoveX) {
+                duckXCoord = duckXCoord - 2;
+                duckDirection = 'left';
+            }
+        } else if (duckXCoord <= toMoveX) {
+            if(duckXCoord <= toMoveX) {
+                duckXCoord = duckXCoord + 2;
+                duckDirection = 'right';
+            }
+        }
+    }
+
+    if(duckXCoord === toMoveX) {
+        toggleDirection = 1;
+    }
+}
+
+function moveDuckYAxis() {
+    if(toggleDirection === 1) {
+        if(duckYCoord >= toMoveY) {
+            duckYCoord = duckYCoord - 2;
+            duckDirection = 'back';
+        } else if (duckYCoord <= toMoveY) {
+            duckYCoord = duckYCoord + 2;
+            duckDirection = 'front';
+        }
+    }
+
+    if(duckYCoord === toMoveY) {
+
+    if(notificationArray < 1) {
+        isMoving = false;
+        
+    }
+
+    toggleDirection = 0;
+    duckXCoord = toMoveX;
+    duckYCoord = toMoveY;
+    isMoving = false;
+
+    if((duckYCoord === 394) || (duckYCoord === 698) || (duckYCoord === 698)) {
+        duckDirection = 'front';
+    } else if ((duckYCoord === 276) || (duckYCoord === 264) || (duckYCoord === 262)) {
+        duckDirection = 'back';
+    }  
+    
+    }
+}
+
+function increaseStats() {
+    if(duckYCoord === 394) {
+        if(frameCount % (bedModFrameRate / 2) === 0) {
+            if(bedNeedHeight < 200) {
+                bedNeedHeight = bedNeedHeight + 10;
+            }
+        }
+    } else if (duckYCoord === 698) {
+        if(frameCount % (socialModFrameRate / 2) === 0) {
+            if(socialNeedHeight < 200) {
+                socialNeedHeight = socialNeedHeight + 10;
+            }
+        }
+    } else if (duckYCoord === 264) {
+        if(frameCount % (fridgeModFrameRate / 2) === 0) {
+            if(fridgeNeedHeight < 200) {
+                fridgeNeedHeight = fridgeNeedHeight + 10;
+            }
+        }
+    } else if (duckYCoord === 262) {
+        if(frameCount % (showerModFrameRate / 2) === 0) {
+            if(showerNeedHeight < 200) {
+                showerNeedHeight = showerNeedHeight + 10;
+            }
+        }
+    }
+
+    if(notificationArray.length > 0) {
+        if(bedNeedHeight === 200) {
+            if(notificationArray[0].type === 1) {
+                notificationArray.splice(0, 1);
+
+                if(notificationArray.length > 0) {
+                    notificationArray[0].startTime = frameCount;
+                }
+            }
+        }
+
+        if(showerNeedHeight === 200) {
+            if(notificationArray[0].type === 5) {
+                notificationArray.splice(0, 1);
+
+                if(notificationArray.length > 0) {
+                    notificationArray[0].startTime = frameCount;
+                }
+            }
+        }
+
+        if(fridgeNeedHeight === 200) {
+            if(notificationArray[0].type === 4) {
+                notificationArray.splice(0, 1);
+
+                if(notificationArray.length > 0) {
+                    notificationArray[0].startTime = frameCount;
+                }
+            }
+        }
+
+        if(socialNeedHeight === 200) {
+            if(notificationArray[0].type === 2) {
+                notificationArray.splice(0, 1);
+
+                if(notificationArray.length > 0) {
+                    notificationArray[0].startTime = frameCount;
+                }
+            }
+        }
+    }
+
+    console.log(bedNeedHeight);
 }
 
