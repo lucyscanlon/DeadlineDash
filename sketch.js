@@ -501,6 +501,8 @@ function moveDuck() {
             console.log("CALLED");
             
             toggleDirection = 1;
+
+            duckDirection = 'back';
             
             if(duckYCoord >= 348) {
                 duckYCoord = duckYCoord - 4;
@@ -515,7 +517,6 @@ function moveDuck() {
             
         }
 } else if ((isMoving === true) && (previousAction !== 2)) {
-    toggleDirection = 0;
     moveDuckXAxis();
     moveDuckYAxis();         
 } else if (isMoving === false) {
@@ -551,15 +552,17 @@ function makeFirstNotificationActive() {
 
 function moveDuckXAxis() {
     if(toggleDirection === 0) {
-        if(duckXCoord >= toMoveX) {
+        if(duckXCoord > toMoveX) {
             if(duckXCoord >= toMoveX) {
                 duckXCoord = duckXCoord - 4;
                 duckDirection = 'left';
+                console.log("left being called");
             }
         } else if (duckXCoord <= toMoveX) {
             if(duckXCoord <= toMoveX) {
                 duckXCoord = duckXCoord + 4;
                 duckDirection = 'right';
+                console.log("right being called");
             }
         }
     }
