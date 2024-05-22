@@ -389,15 +389,39 @@ function drawNeedsPanel() {
     rect(895, 94, 45, 200);
 
      // status 
-     fill(214, 94, 209, 120);
+     if(showerNeedHeight > 50) {
+        fill(177, 210, 141, 255); 
+     } else {
+        fill(243, 113, 113, 120);
+     }
 
      rect(720, 94 + (200 - showerNeedHeight), 45, showerNeedHeight);
+
+     if(fridgeNeedHeight > 50) {
+        fill(177, 210, 141, 255);     
+     } else {
+        fill(243, 113, 113, 120);
+     }
+
      rect(778, 94 + (200 - fridgeNeedHeight), 45, fridgeNeedHeight);
+
+     if(bedNeedHeight > 50) {
+        fill(177, 210, 141, 255);   
+     } else {
+        fill(243, 113, 113, 120);
+     }
      rect(838, 94 + (200 - bedNeedHeight), 45, bedNeedHeight);
+
+     if(socialNeedHeight > 50) {
+        fill(177, 210, 141, 255);    
+     } else {
+        fill(243, 113, 113, 120);
+     }
+
      rect(895, 94 + (200 - socialNeedHeight), 45, socialNeedHeight);
 
     // black outlines 
-    fill(72, 36, 69);
+    fill(176, 140, 55, 255);
 
     // rect 1
     rect(720, 94, 4, 200);
@@ -463,7 +487,7 @@ function decreaseNeeds() {
 
     if(activeAction !== 1) {
         if(frameCount % bedModFrameRate === 0) {
-            if(bedNeedHeight > 0) {
+            if(bedNeedHeight > 10) {
                 bedNeedHeight = bedNeedHeight - 10;
             }
         }
@@ -471,7 +495,7 @@ function decreaseNeeds() {
 
     if(activeAction !== 5) {
         if(frameCount % showerModFrameRate === 0) {
-            if(showerNeedHeight > 0) {
+            if(showerNeedHeight > 10) {
                 showerNeedHeight = showerNeedHeight - 10;
             }
         }
@@ -479,7 +503,7 @@ function decreaseNeeds() {
 
     if(activeAction !== 4) {
         if(frameCount % fridgeModFrameRate === 0) {
-            if(fridgeNeedHeight > 0) {
+            if(fridgeNeedHeight > 10) {
                 fridgeNeedHeight = fridgeNeedHeight - 10;
             }
         }
@@ -487,7 +511,7 @@ function decreaseNeeds() {
 
     if(activeAction !== 2) {
         if(frameCount % socialModFrameRate === 0) {
-            if(socialNeedHeight > 0) {
+            if(socialNeedHeight > 10) {
                 socialNeedHeight = socialNeedHeight - 10;
             }
         }
@@ -632,28 +656,24 @@ function moveDuckYAxis() {
 
 function increaseStats() {
     if(activeAction === 1) {
-        setTimeout(1000);
         if(frameCount % (bedModFrameRate / 2) === 0) {
             if(bedNeedHeight < 200) {
                 bedNeedHeight = bedNeedHeight + 10;
             }
         }
     } else if (activeAction === 2) {
-        setTimeout(1000);
         if(frameCount % (socialModFrameRate / 10) === 0) {
             if(socialNeedHeight < 200) {
                 socialNeedHeight = socialNeedHeight + 10;
             }
         }
     } else if (duckYCoord === fridgeDuckY) {
-        setTimeout(1000);
         if(frameCount % (fridgeModFrameRate / 10) === 0) {
             if(fridgeNeedHeight < 200) {
                 fridgeNeedHeight = fridgeNeedHeight + 10;
             }
         }
     } else if (duckYCoord === showerDuckY) {
-        setTimeout(1000);
         if(frameCount % (showerModFrameRate / 5) === 0) {
             if(showerNeedHeight < 200) {
                 showerNeedHeight = showerNeedHeight + 10;
