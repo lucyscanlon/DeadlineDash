@@ -50,6 +50,13 @@ let previousAction;
 
 let activeAction;
 
+let currentDay;
+let currentHour1;
+let currentHour2;
+let currentMinute1;
+let currentMinute2;
+let minuteCount;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -141,6 +148,14 @@ function setup() {
 
     activeAction = 0;
 
+    currentHour1 = 1;
+    currentHour2 = 2;
+
+    currentMinute1 = 0;
+    currentMinute2 = 0;
+
+    minuteCount = 0;
+
 }
 
 // draw function 
@@ -208,6 +223,8 @@ function draw() {
     makeFirstNotificationActive();
 
     increaseStats();
+
+    drawTimeBar();
 
     //console.log(duckXCoord + " " + duckYCoord);
 
@@ -777,5 +794,59 @@ function displayActiveActionImgFront() {
         tint(255, 0 + opacityPerc);
         image(fridgeActiveImgNight, 0, 0, 700, 700);
     }
+}
+
+
+function drawTimeBar() {
+    fill(201, 177, 120, 255);
+
+    rect(699, 329, 270, 100);
+
+    fill(50, 44, 30);
+    
+    rect(832, 349, 110, 60, 10);
+
+    fill(255);
+    text(currentHour1, 849, 386);
+    text(currentHour2, 863, 386);
+    text(":", 879, 386);
+    text(currentMinute1, 895, 386);
+    text(0, 912, 386);
+
+    //fill(50, 44, 30);
+    textSize(20);
+    fill(255);
+    text("day:", 728, 370);
+    fill(50, 44, 30);
+    textSize(23);
+    text("Monday", 728, 400);
+
+    if(frameCount % 5 === 0) {
+        currentMinute2 = (currentMinute2 + 1) % 10;
+        minuteCount = minuteCount + 1;
+
+        console.log(minuteCount);
+
+        if(minuteCount % 10 === 0) {
+            currentMinute1 = (currentMinute1 + 1) % 6;
+        }
+
+        if(minuteCount % 60 === 0) {
+            currentHour2 = (currentHour2 + 1) % 10;
+        }
+
+        if(minuteCount % 600 === 0) {
+            currentHour1 = (currentHour1 + 1) % 10;
+        }
+
+        if((str(currentHour1) + str(currentHour2)) === '24') {
+            currentHour1 = 0;
+            currentHour2 = 0;
+            minuteCount = 0;
+        }
+    }
+
+    
+
 }
 
