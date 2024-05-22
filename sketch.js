@@ -655,13 +655,13 @@ function moveDuckYAxis() {
 }
 
 function increaseStats() {
-    if(activeAction === 1) {
+    if(duckYCoord === bedDuckY) {
         if(frameCount % (bedModFrameRate / 2) === 0) {
             if(bedNeedHeight < 200) {
                 bedNeedHeight = bedNeedHeight + 10;
             }
         }
-    } else if (activeAction === 2) {
+    } else if (duckYCoord === doorDuckY) {
         if(frameCount % (socialModFrameRate / 10) === 0) {
             if(socialNeedHeight < 200) {
                 socialNeedHeight = socialNeedHeight + 10;
