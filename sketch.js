@@ -139,9 +139,9 @@ function setup() {
 
     toggleDirection = 0;
 
-    bedModFrameRate = 200;
-    showerModFrameRate = 130;
-    fridgeModFrameRate = 100;
+    bedModFrameRate = 500;
+    showerModFrameRate = 300;
+    fridgeModFrameRate = 200;
     socialModFrameRate = 400;
 
     previousAction = 0;
