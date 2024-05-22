@@ -48,37 +48,40 @@ let toggleDirection;
 
 let previousAction;
 
+let activeAction;
+
 function preload() {
-    dayImg = loadImage('img/day.PNG');
-    nightImg = loadImage('img/night.PNG');
+    dayImg = loadImage('img/day1.PNG');
+    nightImg = loadImage('img/night1.PNG');
     computerDayImg = loadImage('img/ComputerDay.PNG');
-    computerDayHoverImg = loadImage('img/ComputerDayHover.PNG');
     bedDayImg = loadImage('img/BedDay.PNG');
-    bedDayHoverImg = loadImage('img/BedDayHover.PNG');
     fridgeDayImg = loadImage('img/fridgeDay.PNG');
-    fridgeDayHoverImg = loadImage('img/fridgeDayHover.PNG');
     showerDayImg = loadImage('img/showerDay.PNG');
-    showerDayHoverImg = loadImage('img/showerDayHover.PNG');
     doorDayImg = loadImage('img/doorDay.PNG');
-    doorDayHoverImg = loadImage('img/doorDayHover.PNG');
 
     //night 
     computerNightImg = loadImage('img/laptopNight.PNG');
-    computerNightHoverImg = loadImage('img/laptopNightHover.PNG');
     bedNightImg = loadImage('img/bedNight.PNG');
-    bedNightHoverImg = loadImage('img/bedNightHover.PNG');
     fridgeNightImg = loadImage('img/fridgeNight.PNG');
-    fridgeNightHoverImg = loadImage('img/fridgeNightHover.PNG');
     showerNightImg = loadImage('img/showerNight.PNG');
-    showerNightHoverImg = loadImage('img/showerNightHover.PNG');
     doorNightImg = loadImage('img/doorNight.PNG');
-    doorNightHoverImg = loadImage('img/doorNightHover.PNG');
 
     // character 
     duckFront = loadImage('img/duckFront.PNG');
     duckLeft = loadImage('img/duckLeft.PNG');
     duckRight = loadImage('img/duckRight.PNG');
     duckBack = loadImage('img/duckBack.PNG');
+
+    // active 
+    socialActiveImgNight = loadImage('img/socialActiveNight.PNG');
+    socialActiveImgDay = loadImage('img/socialActiveDay.PNG');
+    bedActiveImgNight =loadImage('img/bedActiveNight.PNG');
+    bedActiveImgDay = loadImage('img/bedActiveDay.PNG');
+    fridgeActiveImgDay = loadImage('img/fridgeActiveDay.PNG');
+    fridgeActiveImgNight = loadImage('img/fridgeActiveNight.PNG');
+    laptopActiveImgDay = loadImage('img/laptopActiveDay.PNG');
+    laptopActiveImgNight = loadImage('img/laptopActiveNight.PNG');
+    
 }
 
 
@@ -123,7 +126,7 @@ function setup() {
     fridgeDuckX = 314;
     fridgeDuckY = 260;
     doorDuckX = 494;
-    doorDuckY = 696;
+    doorDuckY = 632;
 
     isMoving = false;
 
@@ -136,6 +139,8 @@ function setup() {
 
     previousAction = 0;
 
+    activeAction = 0;
+
 }
 
 // draw function 
@@ -146,6 +151,8 @@ function draw() {
     image(dayImg, 0, 0, 700, 700);
     tint(255, 0 + opacityPerc); // Invert tint for the second image
     image(nightImg, 0, 0, 700, 700);
+
+    displayActiveActionImgBehind()
 
     noTint();
     image(computerDayImg, 0, 0, 700, 700);
@@ -161,7 +168,20 @@ function draw() {
     image(showerNightImg, 0, 0, 700, 700);
     image(doorNightImg, 0, 0, 700, 700);
 
-    drawDuck();
+    console.log(activeAction);
+
+    if((activeAction === 1) && ((duckXCoord !== bedDuckX) || (duckYCoord !== bedDuckY))) {
+        drawDuck();
+    } else if ((activeAction === 3) && ((duckXCoord !== laptopDuckX) || (duckYCoord !== laptopDuckY))) {
+        drawDuck();
+    } else if ((activeAction === 2) && ((duckXCoord !== doorDuckX) || (duckYCoord !== doorDuckY))) {
+        drawDuck();
+    } else if ((activeAction === 5) && ((duckXCoord !== showerDuckX) || (duckYCoord !== showerDuckY))) {
+        drawDuck(); 
+    } else if ((activeAction === 0) || (activeAction === 4)){
+        drawDuck();
+    }
+    
     
     noTint();
     image(bedDayImg, 0, 0, 700, 700);
@@ -170,6 +190,8 @@ function draw() {
     tint(255, 0 + opacityPerc);
     image(bedNightImg, 0, 0, 700, 700);
     image(doorNightImg, 0, 0, 700, 700);
+
+    displayActiveActionImgFront()
 
     passTime();
 
@@ -187,7 +209,7 @@ function draw() {
 
     increaseStats();
 
-    console.log(duckXCoord + " " + duckYCoord);
+    //console.log(duckXCoord + " " + duckYCoord);
 
 }
 
@@ -216,7 +238,7 @@ function passTime() {
 
 function mouseClicked() {
 
-    console.log(200 - bedNeedHeight);
+    //.log(200 - bedNeedHeight);
 
     // objects 
     if(((mouseX >= 0) && (mouseX <= 451)) && ((mouseY >=476) && (mouseY <= 700))) {
@@ -230,7 +252,7 @@ function mouseClicked() {
 
         numberOfClicks = numberOfClicks + 1;
 
-        console.log(notificationArray[0]);
+        //console.log(notificationArray[0]);
 
         //console.log(notificationArray);
         //console.log(previousEndTime);
@@ -498,7 +520,7 @@ function moveDuck() {
     
             function moveDuckFromDoor() {
             
-            console.log("CALLED");
+            //console.log("CALLED");
             
             toggleDirection = 1;
 
@@ -528,8 +550,8 @@ function moveDuck() {
 }
      
 
-    console.log(previousAction);
-    console.log(isMoving);
+    //console.log(previousAction);
+    //console.log(isMoving);
     
 }
 
@@ -537,9 +559,12 @@ function makeFirstNotificationActive() {
 
     if(notificationArray.length > 0) {
         notificationArray[0].active = true;
+        activeAction = notificationArray[0].type;
         toMoveX = notificationArray[0].XCoord;
         toMoveY = notificationArray[0].YCoord;
     
+    } else {
+        activeAction = 0;
     }
 
     if(notificationArray.length > 0) {
@@ -547,6 +572,7 @@ function makeFirstNotificationActive() {
     } else {
         isMoving = false;
     }
+
     
 }
 
@@ -556,13 +582,13 @@ function moveDuckXAxis() {
             if(duckXCoord >= toMoveX) {
                 duckXCoord = duckXCoord - 4;
                 duckDirection = 'left';
-                console.log("left being called");
+                //console.log("left being called");
             }
         } else if (duckXCoord <= toMoveX) {
             if(duckXCoord <= toMoveX) {
                 duckXCoord = duckXCoord + 4;
                 duckDirection = 'right';
-                console.log("right being called");
+                //console.log("right being called");
             }
         }
     }
@@ -685,6 +711,47 @@ function increaseStats() {
 
     }
 
-    console.log(bedNeedHeight);
+    //console.log(bedNeedHeight);
+}
+
+
+function displayActiveActionImgBehind() {
+
+    if((activeAction === 2) && (duckXCoord === doorDuckX) && (duckYCoord === doorDuckY)) {
+        console.log("door active");
+        noTint();
+        image(socialActiveImgDay, 0, 0, 700, 700);
+
+        tint(255, 0 + opacityPerc);
+        image(socialActiveImgNight, 0, 0, 700, 700);
+
+    }
+
+}
+
+function displayActiveActionImgFront() {
+    if((activeAction === 1) && (duckXCoord === bedDuckX) && (duckYCoord === bedDuckY)) {
+        noTint();
+        image(bedActiveImgDay, 0, 0, 700, 700);
+
+        tint(255, 0 + opacityPerc);
+        image(bedActiveImgNight, 0, 0, 700, 700);
+    }
+
+    if((activeAction === 3) && (duckXCoord === laptopDuckX) && (duckYCoord === laptopDuckY)) {
+        noTint();
+        image(laptopActiveImgDay, 0, 0, 700, 700);
+
+        tint(255, 0 + opacityPerc);
+        image(laptopActiveImgNight, 0, 0, 700, 700);
+    }
+
+    if((activeAction === 4) && (duckXCoord === fridgeDuckX) && (duckYCoord === fridgeDuckY)) {
+        noTint();
+        image(fridgeActiveImgDay, 0, 0, 700, 700);
+
+        tint(255, 0 + opacityPerc);
+        image(fridgeActiveImgNight, 0, 0, 700, 700);
+    }
 }
 
