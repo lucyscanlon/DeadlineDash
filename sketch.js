@@ -133,9 +133,9 @@ function setup() {
     toggleDirection = 0;
 
     bedModFrameRate = 200;
-    showerModFrameRate = 100;
-    fridgeModFrameRate = 80;
-    socialModFrameRate = 200;
+    showerModFrameRate = 130;
+    fridgeModFrameRate = 100;
+    socialModFrameRate = 400;
 
     previousAction = 0;
 
@@ -461,7 +461,7 @@ function drawNeedsPanel() {
 
 function decreaseNeeds() {
 
-    if(duckYCoord !== bedDuckY) {
+    if(activeAction !== 1) {
         if(frameCount % bedModFrameRate === 0) {
             if(bedNeedHeight > 0) {
                 bedNeedHeight = bedNeedHeight - 10;
@@ -469,7 +469,7 @@ function decreaseNeeds() {
         }
     }
 
-    if(duckYCoord !== showerDuckY) {
+    if(activeAction !== 5) {
         if(frameCount % showerModFrameRate === 0) {
             if(showerNeedHeight > 0) {
                 showerNeedHeight = showerNeedHeight - 10;
@@ -477,7 +477,7 @@ function decreaseNeeds() {
         }
     }
 
-    if(duckYCoord !== fridgeDuckY) {
+    if(activeAction !== 4) {
         if(frameCount % fridgeModFrameRate === 0) {
             if(fridgeNeedHeight > 0) {
                 fridgeNeedHeight = fridgeNeedHeight - 10;
@@ -485,7 +485,7 @@ function decreaseNeeds() {
         }
     }
 
-    if(duckYCoord !== doorDuckY) {
+    if(activeAction !== 2) {
         if(frameCount % socialModFrameRate === 0) {
             if(socialNeedHeight > 0) {
                 socialNeedHeight = socialNeedHeight - 10;
@@ -631,25 +631,29 @@ function moveDuckYAxis() {
 }
 
 function increaseStats() {
-    if(duckYCoord === bedDuckY) {
+    if(activeAction === 1) {
+        setTimeout(1000);
         if(frameCount % (bedModFrameRate / 2) === 0) {
             if(bedNeedHeight < 200) {
                 bedNeedHeight = bedNeedHeight + 10;
             }
         }
-    } else if (duckYCoord === doorDuckY) {
-        if(frameCount % (socialModFrameRate / 5) === 0) {
+    } else if (activeAction === 2) {
+        setTimeout(1000);
+        if(frameCount % (socialModFrameRate / 10) === 0) {
             if(socialNeedHeight < 200) {
                 socialNeedHeight = socialNeedHeight + 10;
             }
         }
     } else if (duckYCoord === fridgeDuckY) {
+        setTimeout(1000);
         if(frameCount % (fridgeModFrameRate / 10) === 0) {
             if(fridgeNeedHeight < 200) {
                 fridgeNeedHeight = fridgeNeedHeight + 10;
             }
         }
     } else if (duckYCoord === showerDuckY) {
+        setTimeout(1000);
         if(frameCount % (showerModFrameRate / 5) === 0) {
             if(showerNeedHeight < 200) {
                 showerNeedHeight = showerNeedHeight + 10;
