@@ -73,6 +73,16 @@ let qualityOfWork;
 
 let page;
 
+let grade1;
+let grade2;
+let grade3;
+let grade4;
+
+let grade1Array;
+let grade2Array;
+let grade3Array;
+let grade4Array;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -193,7 +203,12 @@ function setup() {
 
     qualityOfWork = "A";
 
-    page = 3;
+    page = 0;
+
+    grade1Array = [];
+    grade2Array = [];
+    grade3Array = [];
+    grade4Array = [];
 
 }
 
@@ -271,7 +286,7 @@ function draw() {
         drawAssignmentPanel();
     
         determineQualityOfWork();
-    } else if (page === 3) {
+    } else if (page === 2) {
         drawEndPage();
     }
 
@@ -941,6 +956,11 @@ function drawTimeBar() {
         }
     }
 
+
+    if(dayOfWeek === "Friday" && currentHour1 === 1 && currentHour2 === 2) {
+        page = 2;
+    }
+
     
 
 }
@@ -1004,11 +1024,15 @@ function drawAssignmentPanel() {
 
     console.log(activeAssignment);
 
+    let statAverage = ((bedNeedHeight + showerNeedHeight + socialNeedHeight + fridgeNeedHeight) / 4);
+
     if((activeAction === 3) && (duckXCoord === laptopDuckX) && (duckYCoord === laptopDuckY)) {
         if(activeAssignment === 1) {
 
             if(essay1Progress < 210) {
                 essay1Progress = essay1Progress + assignmentProgressPace;
+                grade1Array.push(statAverage);
+                console.log("pushed grade 1");
                 if(essay1Progress > 209) {
                     activeAssignment = 2;
                 }
@@ -1020,6 +1044,9 @@ function drawAssignmentPanel() {
 
             if(projectProgress < 210) {
                 projectProgress = projectProgress + assignmentProgressPace;
+                grade2Array.push(statAverage);
+                console.log("pushed grade 2: " + statAverage)
+                console.log("pushed grade 2");
                 if(projectProgress > 209) {
                     activeAssignment = 3;
                 }
@@ -1031,6 +1058,8 @@ function drawAssignmentPanel() {
 
             if(videoPresentationProgress < 210) {
                 videoPresentationProgress = videoPresentationProgress + assignmentProgressPace;
+                grade3Array.push(statAverage);
+                console.log("pushed grade 3");
                 if(videoPresentationProgress > 209) {
                     activeAssignment = 4;
                 }
@@ -1042,6 +1071,8 @@ function drawAssignmentPanel() {
 
             if(essay2Progress < 210) {
                 essay2Progress = essay2Progress + assignmentProgressPace;
+                grade4Array.push(statAverage);
+                console.log("pushed grade 4");
                 if(essay2Progress > 209) {
                     activeAssignment = 4;
                 }
@@ -1053,7 +1084,7 @@ function drawAssignmentPanel() {
     if((bedNeedHeight < 60) || (showerNeedHeight < 60) || (fridgeNeedHeight < 60) || (socialNeedHeight < 60)) {
         assignmentProgressPace = 0.05;
         workingSpeed = "slow";
-        console.log(assignmentProgressPace);
+        //console.log(assignmentProgressPace);
     } else {
         assignmentProgressPace = 0.1;
         workingSpeed = "fast";
@@ -1065,7 +1096,7 @@ function drawAssignmentPanel() {
 function determineQualityOfWork() {
     var statAverage = ((bedNeedHeight + showerNeedHeight + socialNeedHeight + fridgeNeedHeight) / 4);
 
-    console.log("stat average: " + statAverage);
+    //console.log("stat average: " + statAverage);
     if(statAverage >= 170) {
         qualityOfWork = "A";
     } else if (statAverage >= 130) {
@@ -1109,5 +1140,139 @@ function drawStartingPage() {
 
 function drawEndPage() {
     background(243, 214, 145);
+
+    textSize(40);
+    fill(0);
+    textFont('Courier New');
+    textStyle(BOLD);
+    text("Game Over!", 360, 165);
+
+    textSize(18);
+    textStyle(NORMAL);
+    text("The deadline has passed and completed work has been submitted.", 144, 207);
+    text("Here are your final grades:", 324, 237);
+    text("Essay 1:", 324, 337);
+    text("Project:", 324, 377);
+    text("Video Presentation:", 324, 417);
+    text("Essay 2:", 324, 457);
+
+    var grade1Total = 0;
+    var grade2Total = 0;
+    var grade3Total = 0;
+    var grade4Total = 0;
+
+    if(essay1Progress > 209) {
+        for(let i = 0; i < grade1Array.length; i++) {
+            grade1Total = grade1Total + grade1Array[i];
+        }
+    }
+
+    if(projectProgress > 209) {
+        for(let i = 0; i < grade2Array.length; i++) {
+            grade2Total = grade2Total + grade2Array[i];
+        }
+    }
+
+    if(videoPresentationProgress > 209) {
+        for(let i = 0; i < grade3Array.length; i++) {
+            grade3Total = grade3Total + grade3Array[i];
+        }
+    }
+
+    if(essay2Progress > 209) {
+        for(let i = 0; i < grade4Array.length; i++) {
+            grade4Total = grade4Total + grade4Array[i];
+        }
+    } 
+    
+
+    if(essay1Progress > 209) {
+        grade1 = grade1Total / (grade1Array.length);
+
+        if(grade1 >= 170) {
+            grade1 = "A";
+        } else if (grade1 >= 130) {
+            grade1 = "B";
+        } else if (grade1 >= 100) {
+            grade1 = "C";
+        } else if (grade1 >= 80) {
+            grade1 = "D";
+        } else if (grade1 >= 60) {
+            grade1 = "E";
+        } else if (grade1 < 59) {
+            grade1 = "F";
+        }
+    } else {
+        grade1 = "FAIL";
+    }
+
+    //console.log("stat average: " + statAverage);
+    
+    
+    if(projectProgress > 209) {
+        grade2 = grade2Total / (grade2Array.length);
+
+        if(grade2 >= 170) {
+            grade2 = "A";
+        } else if (grade2 >= 130) {
+            grade2 = "B";
+        } else if (grade2 >= 100) {
+            grade2 = "C";
+        } else if (grade2 >= 80) {
+            grade2 = "D";
+        } else if (grade2 >= 60) {
+            grade2 = "E";
+        } else if (grade2 < 59) {
+            grade2 = "F";
+        }
+    } else {
+        grade2 = "FAIL";
+    }
+
+    if(videoPresentationProgress > 209) {
+        grade3 = grade3Total / (grade3Array.length);
+
+        if(grade3 >= 170) {
+            grade3 = "A";
+        } else if (grade3 >= 130) {
+            grade3 = "B";
+        } else if (grade3 >= 100) {
+            grade3 = "C";
+        } else if (grade3 >= 80) {
+            grade3 = "D";
+        } else if (grade3 >= 60) {
+            grade3 = "E";
+        } else if (grade3 < 59) {
+            grade3 = "F";
+        }
+    } else {
+        grade3 = "FAIL";
+    }
+
+    if(essay2Progress > 209) {
+        grade4 = grade4Total / (grade4Array.length);
+
+        if(grade4 >= 170) {
+            grade4 = "A";
+        } else if (grade4 >= 130) {
+            grade4 = "B";
+        } else if (grade4 >= 100) {
+            grade4 = "C";
+        } else if (grade4 >= 80) {
+            grade4 = "D";
+        } else if (grade4 >= 60) {
+            grade4 = "E";
+        } else if (grade4 < 59) {
+            grade4 = "F";
+        }
+    } else {
+        grade4 = "FAIL";
+    }
+    
+    //console.log(grade1);
+    text(grade1, 600, 337);
+    text(grade2, 600, 377);
+    text(grade3, 600, 417);
+    text(grade4, 600, 457);
 }
 
