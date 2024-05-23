@@ -139,10 +139,10 @@ function setup() {
 
     toggleDirection = 0;
 
-    bedModFrameRate = 500;
-    showerModFrameRate = 300;
-    fridgeModFrameRate = 200;
-    socialModFrameRate = 400;
+    bedModFrameRate = 300;
+    showerModFrameRate = 200;
+    fridgeModFrameRate = 150;
+    socialModFrameRate = 250;
 
     previousAction = 0;
 
@@ -183,7 +183,7 @@ function draw() {
     image(showerNightImg, 0, 0, 700, 700);
     image(doorNightImg, 0, 0, 700, 700);
 
-    console.log(activeAction);
+    //console.log(activeAction);
 
     if((activeAction === 1) && ((duckXCoord !== bedDuckX) || (duckYCoord !== bedDuckY))) {
         drawDuck();
@@ -193,7 +193,7 @@ function draw() {
         drawDuck();
     } else if ((activeAction === 5) && ((duckXCoord !== showerDuckX) || (duckYCoord !== showerDuckY))) {
         drawDuck(); 
-    } else if ((activeAction === 0) || (activeAction === 4)){
+    } else if ((activeAction === 0) || (activeAction === 4) || (activeAction === 'undefined')){
         drawDuck();
     }
     
@@ -212,7 +212,7 @@ function draw() {
 
     drawActionQueue();
 
-    timeoutNotifications();
+    //timeoutNotifications();
 
     drawNeedsPanel();
 
@@ -225,6 +225,8 @@ function draw() {
     increaseStats();
 
     drawTimeBar();
+
+    drawAssignmentPanel();
 
     //console.log(duckXCoord + " " + duckYCoord);
 
@@ -373,6 +375,8 @@ function drawActionQueue() {
     
 }
 
+
+/*
 function timeoutNotifications() {
     for(let i = 0; i < notificationArray.length; i++) {
         notificationTimeouts[i] = notificationArray[i].endTime;
@@ -384,7 +388,7 @@ function timeoutNotifications() {
             notificationArray.splice(i, 1);
         }
     }
-}
+}*/
 
 function addEndTime() {
     if(notificationArray === undefined || notificationArray.length === 0) {
@@ -400,10 +404,10 @@ function drawNeedsPanel() {
 
     // white bars
     fill(255);
-    rect(720, 94, 45, 200);
-    rect(778, 94, 45, 200);
-    rect(838, 94, 45, 200);
-    rect(895, 94, 45, 200);
+    rect(720, 74, 45, 200);
+    rect(778, 74, 45, 200);
+    rect(838, 74, 45, 200);
+    rect(895, 74, 45, 200);
 
      // status 
      if(showerNeedHeight > 50) {
@@ -412,7 +416,7 @@ function drawNeedsPanel() {
         fill(243, 113, 113, 120);
      }
 
-     rect(720, 94 + (200 - showerNeedHeight), 45, showerNeedHeight);
+     rect(720, 74 + (200 - showerNeedHeight), 45, showerNeedHeight);
 
      if(fridgeNeedHeight > 50) {
         fill(177, 210, 141, 255);     
@@ -420,14 +424,14 @@ function drawNeedsPanel() {
         fill(243, 113, 113, 120);
      }
 
-     rect(778, 94 + (200 - fridgeNeedHeight), 45, fridgeNeedHeight);
+     rect(778, 74 + (200 - fridgeNeedHeight), 45, fridgeNeedHeight);
 
      if(bedNeedHeight > 50) {
         fill(177, 210, 141, 255);   
      } else {
         fill(243, 113, 113, 120);
      }
-     rect(838, 94 + (200 - bedNeedHeight), 45, bedNeedHeight);
+     rect(838, 74 + (200 - bedNeedHeight), 45, bedNeedHeight);
 
      if(socialNeedHeight > 50) {
         fill(177, 210, 141, 255);    
@@ -435,35 +439,35 @@ function drawNeedsPanel() {
         fill(243, 113, 113, 120);
      }
 
-     rect(895, 94 + (200 - socialNeedHeight), 45, socialNeedHeight);
+     rect(895, 74 + (200 - socialNeedHeight), 45, socialNeedHeight);
 
-    // black outlines 
+    // outlines 
     fill(176, 140, 55, 255);
 
     // rect 1
-    rect(720, 94, 4, 200);
-    rect(764, 94, 4, 200);
-    rect(720, 94, 45, 4);
-    rect(723, 290, 45, 4);
+    rect(720, 74, 4, 200);
+    rect(764, 74, 4, 200);
+    rect(720, 74, 45, 4);
+    rect(723, 270, 45, 4);
 
 
     // rect 2
-    rect(778, 94, 4, 200);
-    rect(823, 94, 4, 200);
-    rect(778, 94, 45, 4);
-    rect(778, 290, 45, 4);
+    rect(778, 74, 4, 200);
+    rect(823, 74, 4, 200);
+    rect(778, 74, 45, 4);
+    rect(778, 270, 45, 4);
 
     // rect 3
-    rect(838, 94, 4, 200);
-    rect(883, 94, 4, 200);
-    rect(838, 94, 45, 4);
-    rect(838, 290, 45, 4);
+    rect(838, 74, 4, 200);
+    rect(883, 74, 4, 200);
+    rect(838, 74, 45, 4);
+    rect(838, 270, 45, 4);
 
     // rect 4
-    rect(895, 94, 4, 200);
-    rect(940, 94, 4, 200);
-    rect(895, 94, 45, 4);
-    rect(895, 290, 45, 4);
+    rect(895, 74, 4, 200);
+    rect(940, 74, 4, 200);
+    rect(895, 74, 45, 4);
+    rect(895, 270, 45, 4);
 
 
     fill(0);
@@ -473,30 +477,30 @@ function drawNeedsPanel() {
     textSize(23);
 
     push();
-    translate(749, 278);
+    translate(749, 258);
     rotate(-90);
     text("Hygiene", 0, 0);
     pop();
 
     push();
-    translate(807, 278);
+    translate(807, 258);
     rotate(-90);
     text("Hunger", 0, 0);
     pop();
 
     push();
-    translate(868, 278);
+    translate(868, 258);
     rotate(-90);
     text("Sleep", 0, 0);
     pop();
 
     push();
-    translate(925, 278);
+    translate(925, 258);
     rotate(-90);
     text("Social", 0, 0);
     pop();
 
-    text("Needs status:", 746, 62);
+    text("Needs status:", 746, 42);
 
 }
 
@@ -593,6 +597,7 @@ function moveDuck() {
 
     //console.log(previousAction);
     //console.log(isMoving);
+    console.log(notificationArray[0]);
     
 }
 
@@ -698,59 +703,54 @@ function increaseStats() {
         }
     }
 
-
+    //console.log(duckXCoord + " " + duckYCoord);
+    console.log(activeAction);
+    //console.log(notificationArray[0]);
     // remove notifications if the needs bar is full
 
-    if(((notificationArray.length > 0 && frameCount > 200))) {
-        if(bedNeedHeight === 200) {
-            if(notificationArray[0].type === 1) {
+        if((notificationArray.length > 0) && (frameCount > 400) && (notificationArray !== 'undefined')) {
+            if((bedNeedHeight === 200) && (notificationArray[0].type === 1)) {
+    
+                    previousAction = notificationArray[0].type;
+                    notificationArray.splice(0, 1);
+    
+                    if(notificationArray.length > 0) {
+                        notificationArray[0].startTime = frameCount;
+                    }
 
-                previousAction = notificationArray[0].type;
-                notificationArray.splice(0, 1);
-
-                
-
-                if(notificationArray.length > 0) {
-                    notificationArray[0].startTime = frameCount;
-                }
             }
-        }
-
-        if(showerNeedHeight === 200) {
-            if(notificationArray[0].type === 5) {
-                previousAction = notificationArray[0].type;
-                notificationArray.splice(0, 1);
-
-                if(notificationArray.length > 0) {
-                    notificationArray[0].startTime = frameCount;
-                }
+    
+            if((showerNeedHeight === 200) && (notificationArray[0].type === 3)) {
+                    previousAction = notificationArray[0].type;
+                    notificationArray.splice(0, 1);
+    
+                    if(notificationArray.length > 0) {
+                        notificationArray[0].startTime = frameCount;
+                    }
             }
-        }
-
-        if(fridgeNeedHeight === 200) {
-            if(notificationArray[0].type === 4) {
-                previousAction = notificationArray[0].type;
-                notificationArray.splice(0, 1);
-
-                if(notificationArray.length > 0) {
-                    notificationArray[0].startTime = frameCount;
-                }
+    
+            if((fridgeNeedHeight === 200) && (notificationArray[0].type === 4)) {
+                    previousAction = notificationArray[0].type;
+                    notificationArray.splice(0, 1);
+    
+                    if(notificationArray.length > 0) {
+                        notificationArray[0].startTime = frameCount;
+                    }
             }
+    
+            if((socialNeedHeight === 200) && (notificationArray[0].type === 2)) {
+                if(notificationArray[0].type === 2) 
+                    previousAction = notificationArray[0].type;
+                    notificationArray.splice(0, 1);
+    
+                    if(notificationArray.length > 0) {
+                        notificationArray[0].startTime = frameCount;
+                    }
+            } 
+        } else if ((notificationArray === 'undefined') || notificationArray.length === 0) {
+            // do nothing
         }
-
-        if(socialNeedHeight === 200) {
-            if(notificationArray[0].type === 2) {
-                previousAction = notificationArray[0].type;
-                notificationArray.splice(0, 1);
-
-                if(notificationArray.length > 0) {
-                    notificationArray[0].startTime = frameCount;
-                }
-            }
-        }
-    } else if (notificationArray !== undefined) {
-
-    }
+    
 
     //console.log(bedNeedHeight);
 }
@@ -800,26 +800,26 @@ function displayActiveActionImgFront() {
 function drawTimeBar() {
     fill(201, 177, 120, 255);
 
-    rect(699, 329, 270, 100);
+    rect(700, 299, 270, 100);
 
     fill(50, 44, 30);
     
-    rect(832, 349, 110, 60, 10);
+    rect(832, 319, 110, 60, 10);
 
     fill(255);
-    text(currentHour1, 849, 386);
-    text(currentHour2, 863, 386);
-    text(":", 879, 386);
-    text(currentMinute1, 895, 386);
-    text(0, 912, 386);
+    text(currentHour1, 849, 356);
+    text(currentHour2, 863, 356);
+    text(":", 879, 356);
+    text(currentMinute1, 895, 356);
+    text("0", 912, 356);
 
     //fill(50, 44, 30);
     textSize(20);
     fill(255);
-    text("day:", 728, 370);
+    text("day:", 728, 340);
     fill(50, 44, 30);
     textSize(23);
-    text("Monday", 728, 400);
+    text("Monday", 728, 370);
 
     if(frameCount % 5 === 0) {
         currentMinute2 = (currentMinute2 + 1) % 10;
@@ -848,5 +848,48 @@ function drawTimeBar() {
 
     
 
+}
+
+function drawAssignmentPanel() {
+    fill(243, 214, 145);
+    rect(700, 394, 270, 330);
+
+    fill(0);
+    textSize(23);
+    text("Assignments:", 749, 432);
+
+    fill(50, 44, 30);
+    rect(719, 445, 220, 35, 10);
+
+    fill(255);
+    textSize(16);
+    text("DUE: Friday 12pm", 750, 467);
+
+    fill(255);
+    rect(723, 499, 210, 35);
+    rect(723, 545, 210, 35);
+    rect(723, 591, 210, 35);
+    rect(723, 637, 210, 35);
+
+    fill(176, 140, 55, 255);
+    rect(723, 499, 210, 5);
+    rect(723, 534, 210, 5);
+    rect(723, 499, 5, 35);
+    rect(928, 499, 5, 35);
+
+    rect(723, 545, 210, 5);
+    rect(723, 579, 210, 5);
+    rect(723, 545, 5, 35);
+    rect(928, 545, 5, 35);
+
+    rect(723, 591, 210, 5);
+    rect(723, 625, 210, 5);
+    rect(723, 591, 5, 35);
+    rect(928, 591, 5, 35);
+
+    rect(723, 637, 210, 5);
+    rect(723, 669, 210, 5);
+    rect(723, 637, 5, 35);
+    rect(928, 637, 5, 35);
 }
 
