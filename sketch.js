@@ -57,6 +57,18 @@ let currentMinute1;
 let currentMinute2;
 let minuteCount;
 
+let essay1Progress;
+let projectProgress;
+let videoPresentationProgress;
+let essay2Progress;
+
+let activeAssignment;
+
+let assignmentProgressPace;
+let workingSpeed;
+
+let dayOfWeek;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -155,6 +167,18 @@ function setup() {
     currentMinute2 = 0;
 
     minuteCount = 0;
+
+    essay1Progress = 0;
+    projectProgress = 0;
+    videoPresentationProgress = 0;
+    essay2Progress = 0;
+
+    activeAssignment = 1;
+
+    assignmentProgressPace = 0.1;
+    workingSpeed = "fast";
+
+    dayOfWeek = "Monday";
 
 }
 
@@ -500,7 +524,10 @@ function drawNeedsPanel() {
     text("Social", 0, 0);
     pop();
 
-    text("Needs status:", 746, 42);
+    text("Needs status:", 746, 37);
+    textSize(15);
+    text("Working Speed: ", 736, 60);
+    text(workingSpeed, 867, 60);
 
 }
 
@@ -597,7 +624,7 @@ function moveDuck() {
 
     //console.log(previousAction);
     //console.log(isMoving);
-    console.log(notificationArray[0]);
+    //console.log(notificationArray[0]);
     
 }
 
@@ -678,7 +705,7 @@ function moveDuckYAxis() {
 
 function increaseStats() {
     if(duckYCoord === bedDuckY) {
-        if(frameCount % (bedModFrameRate / 2) === 0) {
+        if(frameCount % (bedModFrameRate / 10) === 0) {
             if(bedNeedHeight < 200) {
                 bedNeedHeight = bedNeedHeight + 10;
             }
@@ -703,12 +730,9 @@ function increaseStats() {
         }
     }
 
-    //console.log(duckXCoord + " " + duckYCoord);
-    console.log(activeAction);
-    //console.log(notificationArray[0]);
     // remove notifications if the needs bar is full
 
-        if((notificationArray.length > 0) && (frameCount > 400) && (notificationArray !== 'undefined')) {
+        if((notificationArray.length > 0) && (frameCount > 500) && (notificationArray !== 'undefined')) {
             if((bedNeedHeight === 200) && (notificationArray[0].type === 1)) {
     
                     previousAction = notificationArray[0].type;
@@ -720,7 +744,7 @@ function increaseStats() {
 
             }
     
-            if((showerNeedHeight === 200) && (notificationArray[0].type === 3)) {
+            if((showerNeedHeight === 200) && (notificationArray[0].type === 5)) {
                     previousAction = notificationArray[0].type;
                     notificationArray.splice(0, 1);
     
@@ -806,6 +830,7 @@ function drawTimeBar() {
     
     rect(832, 319, 110, 60, 10);
 
+    textSize(20);
     fill(255);
     text(currentHour1, 849, 356);
     text(currentHour2, 863, 356);
@@ -819,9 +844,9 @@ function drawTimeBar() {
     text("day:", 728, 340);
     fill(50, 44, 30);
     textSize(23);
-    text("Monday", 728, 370);
+    text(dayOfWeek, 728, 370);
 
-    if(frameCount % 5 === 0) {
+    if(frameCount % 4 === 0) {
         currentMinute2 = (currentMinute2 + 1) % 10;
         minuteCount = minuteCount + 1;
 
@@ -843,6 +868,16 @@ function drawTimeBar() {
             currentHour1 = 0;
             currentHour2 = 0;
             minuteCount = 0;
+
+            if(dayOfWeek === "Monday") {
+                dayOfWeek = "Tuesday";
+            } else if (dayOfWeek === "Tuesday") {
+                dayOfWeek = "Wednesday";
+            } else if (dayOfWeek === "Wednesday") {
+                dayOfWeek = "Thursday";
+            } else if (dayOfWeek === "Thursday") {
+                dayOfWeek = "Friday";
+            }
         }
     }
 
@@ -859,7 +894,7 @@ function drawAssignmentPanel() {
     text("Assignments:", 749, 432);
 
     fill(50, 44, 30);
-    rect(719, 445, 220, 35, 10);
+    rect(724, 445, 210, 35, 5);
 
     fill(255);
     textSize(16);
@@ -870,6 +905,14 @@ function drawAssignmentPanel() {
     rect(723, 545, 210, 35);
     rect(723, 591, 210, 35);
     rect(723, 637, 210, 35);
+
+    fill(177, 210, 141, 255); 
+    rect(723, 499, essay1Progress, 35);
+    rect(723, 545, projectProgress, 35);
+    rect(723, 591, videoPresentationProgress, 35);
+    rect(723, 637, essay2Progress, 35);
+
+    
 
     fill(176, 140, 55, 255);
     rect(723, 499, 210, 5);
@@ -891,5 +934,71 @@ function drawAssignmentPanel() {
     rect(723, 669, 210, 5);
     rect(723, 637, 5, 35);
     rect(928, 637, 5, 35);
+
+    fill(0);
+    textSize(16.5);
+    text("Essay 1", 739, 525);
+    text("Project", 739, 570);
+    text("Video Presentation", 739, 615);
+    text("Essay 2", 739, 660);
+
+    console.log(activeAssignment);
+
+    if((activeAction === 3) && (duckXCoord === laptopDuckX) && (duckYCoord === laptopDuckY)) {
+        if(activeAssignment === 1) {
+
+            if(essay1Progress < 210) {
+                essay1Progress = essay1Progress + assignmentProgressPace;
+                if(essay1Progress > 209) {
+                    activeAssignment = 2;
+                }
+            } 
+            
+        }
+
+        if(activeAssignment === 2) {
+
+            if(projectProgress < 210) {
+                projectProgress = projectProgress + assignmentProgressPace;
+                if(projectProgress > 209) {
+                    activeAssignment = 3;
+                }
+            } 
+            
+        }
+
+        if(activeAssignment === 3) {
+
+            if(videoPresentationProgress < 210) {
+                videoPresentationProgress = videoPresentationProgress + assignmentProgressPace;
+                if(videoPresentationProgress > 209) {
+                    activeAssignment = 4;
+                }
+            } 
+            
+        }
+
+        if(activeAssignment === 4) {
+
+            if(essay2Progress < 210) {
+                essay2Progress = essay2Progress + assignmentProgressPace;
+                if(essay2Progress > 209) {
+                    activeAssignment = 4;
+                }
+            } 
+            
+        }
+    }
+
+    if((bedNeedHeight < 60) || (showerNeedHeight < 60) || (fridgeNeedHeight < 60) || (socialNeedHeight < 60)) {
+        assignmentProgressPace = 0.05;
+        workingSpeed = "slow";
+        console.log(assignmentProgressPace);
+    } else {
+        assignmentProgressPace = 0.1;
+        workingSpeed = "fast";
+    }
+    
+
 }
 
