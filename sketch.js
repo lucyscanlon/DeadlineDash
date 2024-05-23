@@ -88,6 +88,7 @@ let microwavingSoundPlayed;
 let snoringSoundPlayed;
 let showerSoundPlayed;
 let partySoundPlayed;
+let backgroundMusicPlayed;
 
 function preload() {
     dayImg = loadImage('img/day1.PNG');
@@ -134,6 +135,10 @@ function preload() {
     snoring = loadSound('sound/snoring.mp3');
     shower = loadSound('sound/shower.mp3');
     party = loadSound('sound/party.mp3');
+    backgroundMusic = loadSound('sound/backgroundMusic.mp3');
+
+    openingPage = loadImage('img/openingPage.PNG');
+    endingPage = loadImage('img/endingPage.PNG');
     
 }
 
@@ -227,11 +232,13 @@ function setup() {
     microwavingSoundPlayed = false;
     snoringSoundPlayed = false;
     showerSoundPlayed = false;
+    backgroundMusicPlayed = false;
 
 }
 
 // draw function 
 function draw() {
+    
 
     if(page === 0) {
         drawStartingPage();
@@ -437,13 +444,19 @@ function mouseClicked() {
         console.log("X: " + mouseX + ", Y: " + mouseY);
     
     } else if (page === 0) {
-        if(((mouseX >= 380) && (mouseX <= 577)) && ((mouseY >= 439) && (mouseY <= 490))) {
+        if(((mouseX >= 379) && (mouseX <= 577)) && ((mouseY >= 411) && (mouseY <= 449))) {
             page = 1;
+            if(backgroundMusicPlayed === false) {
+                backgroundMusic.setVolume(0.2);
+                backgroundMusic.play();
+                backgroundMusicPlayed = true;
+            }
         }
     }
     // objects 
     
 
+    console.log("MouseX: " + mouseX + " MouseY: " + mouseY);
     
 
     
@@ -1198,31 +1211,36 @@ function determineQualityOfWork() {
 function drawStartingPage() {
     background(243, 214, 145);
 
+    image(openingPage, 0, 0, width, height);
+
     textSize(40);
     fill(0);
     textFont('Courier New');
     textStyle(BOLD);
-    text("Deadline Dash!", 310, 245);
 
-    textSize(18);
-    textStyle(NORMAL);
-    text("Complete four assignments before the deadline on Friday.", 144, 297);
-    text("Keep up with your personal needs: hygiene, hunger, social and sleep.", 114, 327);
-    text("High personal need stats lead to high quality work,", 224, 357);
-    text("and a faster work pace.", 344, 387);
+    textSize(14);
+    textStyle(BOLD);
+    fill(255);
+    text("Complete four assignments before the deadline on Friday.", 244, 267);
+    text("Keep up with your personal needs: ", 346, 297);
+    text("hygiene, hunger, social and sleep.", 340,327);
+    text("High personal need stats lead to high quality work,", 264, 357);
+    text("and a faster work pace.", 384, 387);
+
+    fill(243, 214, 145);
+    rect(379, 411, 200, 40, 10);
 
     fill(0);
-    rect(379, 441, 200, 50, 20);
-
-    fill(255);
     textStyle(BOLD);
     textSize(23);
-    text("Start Game", 412, 471);
+    text("Start Game", 412, 437);
 }
 
 
 function drawEndPage() {
     background(243, 214, 145);
+
+    image(endingPage, 0, 0, width, height);
 
     shower.stop();
     party.stop();
@@ -1230,21 +1248,16 @@ function drawEndPage() {
     snoring.stop();
     microwaving.stop();
 
-
-    textSize(40);
-    fill(0);
+    fill(255);
     textFont('Courier New');
+    textSize(14);
     textStyle(BOLD);
-    text("Game Over!", 360, 165);
-
-    textSize(18);
-    textStyle(NORMAL);
-    text("The deadline has passed and completed work has been submitted.", 144, 207);
-    text("Here are your final grades:", 324, 237);
-    text("Essay 1:", 324, 337);
-    text("Project:", 324, 377);
-    text("Video Presentation:", 324, 417);
-    text("Essay 2:", 324, 457);
+    text("The deadline has passed and completed work has been submitted.", 224, 263);
+    text("Here are your final grades:", 354, 287);
+    text("Essay 1:", 324, 327);
+    text("Project:", 324, 367);
+    text("Video Presentation:", 324, 407);
+    text("Essay 2:", 324, 447);
 
     var grade1Total = 0;
     var grade2Total = 0;
@@ -1360,9 +1373,9 @@ function drawEndPage() {
     }
     
     //console.log(grade1);
-    text(grade1, 600, 337);
-    text(grade2, 600, 377);
-    text(grade3, 600, 417);
-    text(grade4, 600, 457);
-}
+    text(grade1, 600, 327);
+    text(grade2, 600, 367);
+    text(grade3, 600, 407);
+    text(grade4, 600, 447);
 
+}
