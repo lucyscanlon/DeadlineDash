@@ -83,6 +83,12 @@ let grade2Array;
 let grade3Array;
 let grade4Array;
 
+let typingSoundPlayed;
+let microwavingSoundPlayed;
+let snoringSoundPlayed;
+let showerSoundPlayed;
+let partySoundPlayed;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -121,6 +127,13 @@ function preload() {
     sleepZ = loadImage('img/sleepZ.PNG');
     apple = loadImage('img/apple.PNG');
     showerHead = loadImage('img/showerHead.PNG');
+
+    //sound
+    typingFast = loadSound('sound/typingFast.mp3');
+    microwaving = loadSound('sound/microwave.mp3');
+    snoring = loadSound('sound/snoring.mp3');
+    shower = loadSound('sound/shower.mp3');
+    party = loadSound('sound/party.mp3');
     
 }
 
@@ -172,10 +185,10 @@ function setup() {
 
     toggleDirection = 0;
 
-    bedModFrameRate = 300;
+    bedModFrameRate = 240;
     showerModFrameRate = 200;
-    fridgeModFrameRate = 150;
-    socialModFrameRate = 250;
+    fridgeModFrameRate = 120;
+    socialModFrameRate = 220;
 
     previousAction = 0;
 
@@ -209,6 +222,11 @@ function setup() {
     grade2Array = [];
     grade3Array = [];
     grade4Array = [];
+
+    typingSoundPlayed = false;
+    microwavingSoundPlayed = false;
+    snoringSoundPlayed = false;
+    showerSoundPlayed = false;
 
 }
 
@@ -290,9 +308,6 @@ function draw() {
         drawEndPage();
     }
 
-    
-
-    //console.log(duckXCoord + " " + duckYCoord);
 
 }
 
@@ -460,7 +475,7 @@ function drawActionQueue() {
         rect(10 + ((i * 80) + (i * 20)), 10, 80, 80, 10);
 
         noTint();
-        image(imageToDisplay, 15 + ((i * 80) + (i * 20)), 15, 70, 70, 20);
+        image(imageToDisplay, 15 + ((i * 80) + (i * 20)), 15, 70, 70);
         //rect(10 + ((i * 80) + (i * 20)), 10, 80, 80, 10);
     }
 }
@@ -780,18 +795,45 @@ function moveDuckYAxis() {
 
 function increaseStats() {
     if(duckYCoord === bedDuckY) {
-        if(frameCount % (bedModFrameRate / 10) === 0) {
+        if(frameCount % (bedModFrameRate / 5) === 0) {
+
+            if((snoringSoundPlayed === false) && (activeAction === 1)) {
+                snoring.loop();
+                snoringSoundPlayed = true;
+            } else if (activeAction !== 1) {
+                snoring.stop();
+                snoringSoundPlayed = false;
+            }
+
+
             if(bedNeedHeight < 200) {
                 bedNeedHeight = bedNeedHeight + 10;
             }
         }
     } else if (duckYCoord === doorDuckY) {
         if(frameCount % (socialModFrameRate / 10) === 0) {
+
+            if((partySoundPlayed === false) && (activeAction === 2)) {
+                party.loop();
+                partySoundPlayed = true;
+            } else if (activeAction !== 2) {
+                party.stop();
+                partySoundPlayed = false;
+            }
+
             if(socialNeedHeight < 200) {
                 socialNeedHeight = socialNeedHeight + 10;
             }
         }
     } else if (duckYCoord === fridgeDuckY) {
+        if((microwavingSoundPlayed === false) && (activeAction === 4)) {
+            microwaving.loop();
+            microwavingSoundPlayed = true;
+        } else if (activeAction !== 4) {
+            microwaving.stop();
+            microwavingSoundPlayed = false;
+        }
+
         if(frameCount % (fridgeModFrameRate / 10) === 0) {
             if(fridgeNeedHeight < 200) {
                 fridgeNeedHeight = fridgeNeedHeight + 10;
@@ -799,9 +841,50 @@ function increaseStats() {
         }
     } else if (duckYCoord === showerDuckY) {
         if(frameCount % (showerModFrameRate / 5) === 0) {
+
+            if((showerSoundPlayed === false) && (activeAction === 5)) {
+                shower.loop();
+                showerSoundPlayed = true;
+            } else if (activeAction !== 5) {
+                shower.stop();
+                showerSoundPlayed = false;
+            }
+
             if(showerNeedHeight < 200) {
                 showerNeedHeight = showerNeedHeight + 10;
             }
+        }
+    } else if ((duckYCoord === laptopDuckY) && (activeAction === 3)) {
+        if(typingSoundPlayed === false) {
+            typingFast.loop();
+            typingSoundPlayed = true;
+        } 
+        
+    } else {
+
+        if(activeAction !== 3) {
+            typingFast.stop();
+            typingSoundPlayed = false;
+        }
+
+        if(activeAction !== 4) {
+            microwavingSoundPlayed = false;
+            microwaving.stop();
+        }
+
+        if(activeAction !== 1) {
+            snoring.stop();
+            snoringSoundPlayed = false;
+        }
+
+        if(activeAction !== 5) {
+            shower.stop();
+            showerSoundPlayed = false;
+        }
+
+        if(activeAction !== 2) {
+            party.stop();
+            partySoundPlayed = false;
         }
     }
 
@@ -925,7 +1008,7 @@ function drawTimeBar() {
         currentMinute2 = (currentMinute2 + 1) % 10;
         minuteCount = minuteCount + 1;
 
-        console.log(minuteCount);
+        //console.log(minuteCount);
 
         if(minuteCount % 10 === 0) {
             currentMinute1 = (currentMinute1 + 1) % 6;
@@ -1022,7 +1105,7 @@ function drawAssignmentPanel() {
     text("Video Presentation", 739, 615);
     text("Essay 2", 739, 660);
 
-    console.log(activeAssignment);
+    //console.log(activeAssignment);
 
     let statAverage = ((bedNeedHeight + showerNeedHeight + socialNeedHeight + fridgeNeedHeight) / 4);
 
@@ -1032,7 +1115,7 @@ function drawAssignmentPanel() {
             if(essay1Progress < 210) {
                 essay1Progress = essay1Progress + assignmentProgressPace;
                 grade1Array.push(statAverage);
-                console.log("pushed grade 1");
+                //console.log("pushed grade 1");
                 if(essay1Progress > 209) {
                     activeAssignment = 2;
                 }
@@ -1045,8 +1128,8 @@ function drawAssignmentPanel() {
             if(projectProgress < 210) {
                 projectProgress = projectProgress + assignmentProgressPace;
                 grade2Array.push(statAverage);
-                console.log("pushed grade 2: " + statAverage)
-                console.log("pushed grade 2");
+               // console.log("pushed grade 2: " + statAverage)
+                //console.log("pushed grade 2");
                 if(projectProgress > 209) {
                     activeAssignment = 3;
                 }
@@ -1059,7 +1142,7 @@ function drawAssignmentPanel() {
             if(videoPresentationProgress < 210) {
                 videoPresentationProgress = videoPresentationProgress + assignmentProgressPace;
                 grade3Array.push(statAverage);
-                console.log("pushed grade 3");
+                //console.log("pushed grade 3");
                 if(videoPresentationProgress > 209) {
                     activeAssignment = 4;
                 }
@@ -1072,7 +1155,7 @@ function drawAssignmentPanel() {
             if(essay2Progress < 210) {
                 essay2Progress = essay2Progress + assignmentProgressPace;
                 grade4Array.push(statAverage);
-                console.log("pushed grade 4");
+                //console.log("pushed grade 4");
                 if(essay2Progress > 209) {
                     activeAssignment = 4;
                 }
@@ -1140,6 +1223,13 @@ function drawStartingPage() {
 
 function drawEndPage() {
     background(243, 214, 145);
+
+    shower.stop();
+    party.stop();
+    typingFast.stop();
+    snoring.stop();
+    microwaving.stop();
+
 
     textSize(40);
     fill(0);
