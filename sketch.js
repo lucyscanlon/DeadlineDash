@@ -102,6 +102,13 @@ function preload() {
     fridgeActiveImgNight = loadImage('img/fridgeActiveNight.PNG');
     laptopActiveImgDay = loadImage('img/laptopActiveDay.PNG');
     laptopActiveImgNight = loadImage('img/laptopActiveNight.PNG');
+
+    // action bar
+    partyHat = loadImage('img/partyHat.PNG');
+    laptop = loadImage('img/laptop.PNG');
+    sleepZ = loadImage('img/sleepZ.PNG');
+    apple = loadImage('img/apple.PNG');
+    showerHead = loadImage('img/showerHead.PNG');
     
 }
 
@@ -389,17 +396,33 @@ function mouseClicked() {
 }
 
 function drawActionQueue() {
-    fill(0, 0, 0, 150);
+    fill(243, 214, 145, 200);
     noStroke();
-    rect(0, 0, 700, 120);
-
-    textSize(16);
-    fill(255);
-    text("Action Queue:", 10, 22);
+    rect(0, 0, 700, 100);
 
     for(let i = 0; i < notificationArray.length; i++) {
-        fill(0, 0, 0);
-        rect(10 + ((i * 80) + (i * 20)), 30, 80, 80, 10);
+
+        var typeOfAction = notificationArray[i].type
+        var imageToDisplay;
+
+        if(typeOfAction === 1) {
+            imageToDisplay = sleepZ;
+        } else if (typeOfAction === 2) {
+            imageToDisplay = partyHat;
+        } else if (typeOfAction === 3) {
+            imageToDisplay = laptop;
+        } else if (typeOfAction === 4) {
+            imageToDisplay = apple;
+        } else if (typeOfAction === 5) {
+            imageToDisplay = showerHead;
+        }
+
+        fill(255, 255, 255, 255);
+        rect(10 + ((i * 80) + (i * 20)), 10, 80, 80, 10);
+
+        noTint();
+        image(imageToDisplay, 15 + ((i * 80) + (i * 20)), 15, 70, 70, 20);
+        //rect(10 + ((i * 80) + (i * 20)), 10, 80, 80, 10);
     }
 
     
