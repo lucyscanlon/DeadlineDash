@@ -71,6 +71,8 @@ let dayOfWeek;
 
 let qualityOfWork;
 
+let page;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -191,79 +193,89 @@ function setup() {
 
     qualityOfWork = "A";
 
+    page = 3;
+
 }
 
 // draw function 
 function draw() {
 
-    background(51); // Clear the background each frame
-    noTint(); // Set tint before drawing image
-    image(dayImg, 0, 0, 700, 700);
-    tint(255, 0 + opacityPerc); // Invert tint for the second image
-    image(nightImg, 0, 0, 700, 700);
-
-    displayActiveActionImgBehind()
-
-    noTint();
-    image(computerDayImg, 0, 0, 700, 700);
-    image(bedDayImg, 0, 0, 700, 700);
-    image(fridgeDayImg, 0, 0, 700, 700);
-    image(showerDayImg, 0, 0, 700, 700);
-    image(doorDayImg, 0, 0, 700, 700);
+    if(page === 0) {
+        drawStartingPage();
+    } else if(page === 1) {
+        background(51); // Clear the background each frame
+        noTint(); // Set tint before drawing image
+        image(dayImg, 0, 0, 700, 700);
+        tint(255, 0 + opacityPerc); // Invert tint for the second image
+        image(nightImg, 0, 0, 700, 700);
     
-    tint(255, 0 + opacityPerc);
-    image(computerNightImg, 0, 0, 700, 700);
-    image(bedNightImg, 0, 0, 700, 700);
-    image(fridgeNightImg, 0, 0, 700, 700);
-    image(showerNightImg, 0, 0, 700, 700);
-    image(doorNightImg, 0, 0, 700, 700);
-
-    //console.log(activeAction);
-
-    if((activeAction === 1) && ((duckXCoord !== bedDuckX) || (duckYCoord !== bedDuckY))) {
-        drawDuck();
-    } else if ((activeAction === 3) && ((duckXCoord !== laptopDuckX) || (duckYCoord !== laptopDuckY))) {
-        drawDuck();
-    } else if ((activeAction === 2) && ((duckXCoord !== doorDuckX) || (duckYCoord !== doorDuckY))) {
-        drawDuck();
-    } else if ((activeAction === 5) && ((duckXCoord !== showerDuckX) || (duckYCoord !== showerDuckY))) {
-        drawDuck(); 
-    } else if ((activeAction === 0) || (activeAction === 4) || (activeAction === 'undefined')){
-        drawDuck();
+        displayActiveActionImgBehind()
+    
+        noTint();
+        image(computerDayImg, 0, 0, 700, 700);
+        image(bedDayImg, 0, 0, 700, 700);
+        image(fridgeDayImg, 0, 0, 700, 700);
+        image(showerDayImg, 0, 0, 700, 700);
+        image(doorDayImg, 0, 0, 700, 700);
+        
+        tint(255, 0 + opacityPerc);
+        image(computerNightImg, 0, 0, 700, 700);
+        image(bedNightImg, 0, 0, 700, 700);
+        image(fridgeNightImg, 0, 0, 700, 700);
+        image(showerNightImg, 0, 0, 700, 700);
+        image(doorNightImg, 0, 0, 700, 700);
+    
+        //console.log(activeAction);
+    
+        if((activeAction === 1) && ((duckXCoord !== bedDuckX) || (duckYCoord !== bedDuckY))) {
+            drawDuck();
+        } else if ((activeAction === 3) && ((duckXCoord !== laptopDuckX) || (duckYCoord !== laptopDuckY))) {
+            drawDuck();
+        } else if ((activeAction === 2) && ((duckXCoord !== doorDuckX) || (duckYCoord !== doorDuckY))) {
+            drawDuck();
+        } else if ((activeAction === 5) && ((duckXCoord !== showerDuckX) || (duckYCoord !== showerDuckY))) {
+            drawDuck(); 
+        } else if ((activeAction === 0) || (activeAction === 4) || (activeAction === 'undefined')){
+            drawDuck();
+        }
+        
+        
+        noTint();
+        image(bedDayImg, 0, 0, 700, 700);
+        image(doorDayImg, 0, 0, 700, 700);
+    
+        tint(255, 0 + opacityPerc);
+        image(bedNightImg, 0, 0, 700, 700);
+        image(doorNightImg, 0, 0, 700, 700);
+    
+        displayActiveActionImgFront()
+    
+        passTime();
+    
+        drawActionQueue();
+    
+        //timeoutNotifications();
+    
+        drawNeedsPanel();
+    
+        decreaseNeeds();
+    
+        moveDuck();
+    
+        makeFirstNotificationActive();
+    
+        increaseStats();
+    
+        drawTimeBar();
+    
+        drawAssignmentPanel();
+    
+        determineQualityOfWork();
+    } else if (page === 3) {
+        drawEndPage();
     }
+
     
-    
-    noTint();
-    image(bedDayImg, 0, 0, 700, 700);
-    image(doorDayImg, 0, 0, 700, 700);
-
-    tint(255, 0 + opacityPerc);
-    image(bedNightImg, 0, 0, 700, 700);
-    image(doorNightImg, 0, 0, 700, 700);
-
-    displayActiveActionImgFront()
-
-    passTime();
-
-    drawActionQueue();
-
-    //timeoutNotifications();
-
-    drawNeedsPanel();
-
-    decreaseNeeds();
-
-    moveDuck();
-
-    makeFirstNotificationActive();
-
-    increaseStats();
-
-    drawTimeBar();
-
-    drawAssignmentPanel();
-
-    determineQualityOfWork();
 
     //console.log(duckXCoord + " " + duckYCoord);
 
@@ -296,103 +308,115 @@ function mouseClicked() {
 
     //.log(200 - bedNeedHeight);
 
-    // objects 
-    if(((mouseX >= 0) && (mouseX <= 451)) && ((mouseY >=476) && (mouseY <= 700))) {
-        console.log("Bed clicked");
 
-        var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: bedDuckX, YCoord: bedDuckY, active: false};
-        notificationArray.push(newNotification);
-        previousEndTime = newNotification.endTime;
-
-        isMoving = true;
-
-        numberOfClicks = numberOfClicks + 1;
-
-        //console.log(notificationArray[0]);
-
-        //console.log(notificationArray);
-        //console.log(previousEndTime);
-    } 
-
-    if(((mouseX >= 509) && (mouseX <= 690)) && ((mouseY >= 554) && (mouseY <= 700))) {
-        console.log("Door clicked");
-
-        var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: doorDuckX, YCoord: doorDuckY, active: false};
-        notificationArray.push(newNotification);
-        previousEndTime = newNotification.endTime;
-
-        isMoving = true;
-
-        numberOfClicks = numberOfClicks + 1;
-    }
-
-    if(((mouseX >=106) && (mouseX <= 221)) && ((mouseY >= 147) && (mouseY <= 253))) {
-        console.log("laptop clicked");
-
-        var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: laptopDuckX, YCoord: laptopDuckY, active: false};
-        notificationArray.push(newNotification);
-        previousEndTime = newNotification.endTime;
-
-        isMoving = true;
-
-        numberOfClicks = numberOfClicks + 1;
-    }
-
-    if(((mouseX >= 319) && (mouseX <= 438)) && ((mouseY >= 151) && (mouseY <= 347))) {
-        console.log("fridge clicked");
-
-        var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: fridgeDuckX, YCoord: fridgeDuckY, active: false};
-        notificationArray.push(newNotification);
-        previousEndTime = newNotification.endTime;
-
-        isMoving = true;
-
-        numberOfClicks = numberOfClicks + 1;
-    }
-
-    if(((mouseX >= 551) && (mouseX <= 700)) && ((mouseY >= 0) && (mouseY <= 354))) {
-        console.log("shower clicked");
-
-        var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: showerDuckX, YCoord: showerDuckY, active: false};
-        notificationArray.push(newNotification);
-        previousEndTime = newNotification.endTime;
-
-        numberOfClicks = numberOfClicks + 1;
-
-        isMoving = true;
-    }
-
-    // action queue - notification 1
-    if(((mouseX >= 9) && (mouseX <= 90)) && ((mouseY >= 28) && (mouseY <= 110))) {
-        console.log("notification one pressed");
-        previousAction = notificationArray[0].type;
-        notificationArray.splice(0, 1);
-        
-    }
-
-    // notification 2
-    if(((mouseX >= 109) && (mouseX <= 190)) && ((mouseY >= 30) && (mouseY <= 110))) {
-        console.log("notification two pressed");
-        previousAction = notificationArray[0].type;
-        notificationArray.splice(1, 1);
-    }
-
-    // notification 3
-    if(((mouseX >= 211) && (mouseX <= 289)) && ((mouseY >= 30) && (mouseY <= 110))) {
-        console.log("notification three pressed");
-        previousAction = notificationArray[0].type;
-        notificationArray.splice(2, 1);
-    }
-
-    // notification 4
-    if(((mouseX >= 310) && (mouseX <= 389)) && ((mouseY >= 30) && (mouseY <= 110))) {
-        console.log("notification four pressed");
-        previousAction = notificationArray[0].type;
-        notificationArray.splice(3, 1);
-    }
+    if(page === 1) {
+        if(((mouseX >= 0) && (mouseX <= 451)) && ((mouseY >=476) && (mouseY <= 700))) {
+            console.log("Bed clicked");
     
-    console.log("X: " + mouseX + ", Y: " + mouseY);
+            var newNotification = {type: 1, startTime: addEndTime(), endTime: addEndTime() + 2000, XCoord: bedDuckX, YCoord: bedDuckY, active: false};
+            notificationArray.push(newNotification);
+            previousEndTime = newNotification.endTime;
+    
+            isMoving = true;
+    
+            numberOfClicks = numberOfClicks + 1;
+    
+            //console.log(notificationArray[0]);
+    
+            //console.log(notificationArray);
+            //console.log(previousEndTime);
+        } 
+    
+        if(((mouseX >= 509) && (mouseX <= 690)) && ((mouseY >= 554) && (mouseY <= 700))) {
+            console.log("Door clicked");
+    
+            var newNotification = {type: 2, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: doorDuckX, YCoord: doorDuckY, active: false};
+            notificationArray.push(newNotification);
+            previousEndTime = newNotification.endTime;
+    
+            isMoving = true;
+    
+            numberOfClicks = numberOfClicks + 1;
+        }
+    
+        if(((mouseX >=106) && (mouseX <= 221)) && ((mouseY >= 147) && (mouseY <= 253))) {
+            console.log("laptop clicked");
+    
+            var newNotification = {type: 3, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: laptopDuckX, YCoord: laptopDuckY, active: false};
+            notificationArray.push(newNotification);
+            previousEndTime = newNotification.endTime;
+    
+            isMoving = true;
+    
+            numberOfClicks = numberOfClicks + 1;
+        }
+    
+        if(((mouseX >= 319) && (mouseX <= 438)) && ((mouseY >= 151) && (mouseY <= 347))) {
+            console.log("fridge clicked");
+    
+            var newNotification = {type: 4, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: fridgeDuckX, YCoord: fridgeDuckY, active: false};
+            notificationArray.push(newNotification);
+            previousEndTime = newNotification.endTime;
+    
+            isMoving = true;
+    
+            numberOfClicks = numberOfClicks + 1;
+        }
+    
+        if(((mouseX >= 551) && (mouseX <= 700)) && ((mouseY >= 0) && (mouseY <= 354))) {
+            console.log("shower clicked");
+    
+            var newNotification = {type: 5, startTime: addEndTime(), endTime: addEndTime() + 5000, XCoord: showerDuckX, YCoord: showerDuckY, active: false};
+            notificationArray.push(newNotification);
+            previousEndTime = newNotification.endTime;
+    
+            numberOfClicks = numberOfClicks + 1;
+    
+            isMoving = true;
+        }
+    
+        // action queue - notification 1
+        if(((mouseX >= 9) && (mouseX <= 90)) && ((mouseY >= 28) && (mouseY <= 110))) {
+            console.log("notification one pressed");
+            previousAction = notificationArray[0].type;
+            notificationArray.splice(0, 1);
+            
+        }
+    
+        // notification 2
+        if(((mouseX >= 109) && (mouseX <= 190)) && ((mouseY >= 30) && (mouseY <= 110))) {
+            console.log("notification two pressed");
+            previousAction = notificationArray[0].type;
+            notificationArray.splice(1, 1);
+        }
+    
+        // notification 3
+        if(((mouseX >= 211) && (mouseX <= 289)) && ((mouseY >= 30) && (mouseY <= 110))) {
+            console.log("notification three pressed");
+            previousAction = notificationArray[0].type;
+            notificationArray.splice(2, 1);
+        }
+    
+        // notification 4
+        if(((mouseX >= 310) && (mouseX <= 389)) && ((mouseY >= 30) && (mouseY <= 110))) {
+            console.log("notification four pressed");
+            previousAction = notificationArray[0].type;
+            notificationArray.splice(3, 1);
+        }
+        
+        console.log("X: " + mouseX + ", Y: " + mouseY);
+    
+    } else if (page === 0) {
+        if(((mouseX >= 380) && (mouseX <= 577)) && ((mouseY >= 439) && (mouseY <= 490))) {
+            page = 1;
+        }
+    }
+    // objects 
+    
 
+    
+
+    
 }
 
 function drawActionQueue() {
@@ -424,8 +448,6 @@ function drawActionQueue() {
         image(imageToDisplay, 15 + ((i * 80) + (i * 20)), 15, 70, 70, 20);
         //rect(10 + ((i * 80) + (i * 20)), 10, 80, 80, 10);
     }
-
-    
 }
 
 
@@ -525,7 +547,7 @@ function drawNeedsPanel() {
 
     fill(0);
     textFont('Courier New');
-    textStyle(BOLD)
+    textStyle(BOLD);
     angleMode(DEGREES);
     textSize(23);
 
@@ -1057,5 +1079,35 @@ function determineQualityOfWork() {
     } else if (statAverage < 59) {
         qualityOfWork = "F";
     }
+}
+
+function drawStartingPage() {
+    background(243, 214, 145);
+
+    textSize(40);
+    fill(0);
+    textFont('Courier New');
+    textStyle(BOLD);
+    text("Deadline Dash!", 310, 245);
+
+    textSize(18);
+    textStyle(NORMAL);
+    text("Complete four assignments before the deadline on Friday.", 144, 297);
+    text("Keep up with your personal needs: hygiene, hunger, social and sleep.", 114, 327);
+    text("High personal need stats lead to high quality work,", 224, 357);
+    text("and a faster work pace.", 344, 387);
+
+    fill(0);
+    rect(379, 441, 200, 50, 20);
+
+    fill(255);
+    textStyle(BOLD);
+    textSize(23);
+    text("Start Game", 412, 471);
+}
+
+
+function drawEndPage() {
+    background(243, 214, 145);
 }
 
