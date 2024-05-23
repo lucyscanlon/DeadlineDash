@@ -69,6 +69,8 @@ let workingSpeed;
 
 let dayOfWeek;
 
+let qualityOfWork;
+
 function preload() {
     dayImg = loadImage('img/day1.PNG');
     nightImg = loadImage('img/night1.PNG');
@@ -180,6 +182,8 @@ function setup() {
 
     dayOfWeek = "Monday";
 
+    qualityOfWork = "A";
+
 }
 
 // draw function 
@@ -252,12 +256,14 @@ function draw() {
 
     drawAssignmentPanel();
 
+    determineQualityOfWork();
+
     //console.log(duckXCoord + " " + duckYCoord);
 
 }
 
 function passTime() {
-    if(frameCount % 20 === 0) {
+    if(frameCount % 11 === 0) {
         time = time + 1;
 
         if(timePassDirection === true) {
@@ -526,8 +532,17 @@ function drawNeedsPanel() {
 
     text("Needs status:", 746, 37);
     textSize(15);
-    text("Working Speed: ", 736, 60);
-    text(workingSpeed, 867, 60);
+    text("Working Speed: ", 746, 60);
+    text(workingSpeed, 877, 60);
+
+    text("Quality of work:", 743, 305);
+
+    fill(177, 210, 141, 255)
+    rect(895, 283, 35, 35, 5);
+
+    fill(0);
+    textSize(23);
+    text(qualityOfWork, 906, 308);
 
 }
 
@@ -824,27 +839,27 @@ function displayActiveActionImgFront() {
 function drawTimeBar() {
     fill(201, 177, 120, 255);
 
-    rect(700, 299, 270, 100);
+    rect(700, 329, 270, 100);
 
     fill(50, 44, 30);
     
-    rect(832, 319, 110, 60, 10);
+    rect(832, 338, 110, 45, 10);
 
     textSize(20);
     fill(255);
-    text(currentHour1, 849, 356);
-    text(currentHour2, 863, 356);
-    text(":", 879, 356);
-    text(currentMinute1, 895, 356);
-    text("0", 912, 356);
+    text(currentHour1, 849, 366);
+    text(currentHour2, 863, 366);
+    text(":", 879, 366);
+    text(currentMinute1, 895, 366);
+    text("0", 912, 366);
 
     //fill(50, 44, 30);
-    textSize(20);
+    textSize(19);
     fill(255);
-    text("day:", 728, 340);
+    text("day:", 728, 355);
     fill(50, 44, 30);
-    textSize(23);
-    text(dayOfWeek, 728, 370);
+    textSize(18);
+    text(dayOfWeek, 728, 380);
 
     if(frameCount % 4 === 0) {
         currentMinute2 = (currentMinute2 + 1) % 10;
@@ -1000,5 +1015,24 @@ function drawAssignmentPanel() {
     }
     
 
+}
+
+function determineQualityOfWork() {
+    var statAverage = ((bedNeedHeight + showerNeedHeight + socialNeedHeight + fridgeNeedHeight) / 4);
+
+    console.log("stat average: " + statAverage);
+    if(statAverage >= 170) {
+        qualityOfWork = "A";
+    } else if (statAverage >= 130) {
+        qualityOfWork = "B";
+    } else if (statAverage >= 100) {
+        qualityOfWork = "C";
+    } else if (statAverage >= 80) {
+        qualityOfWork = "D";
+    } else if (statAverage >= 60) {
+        qualityOfWork = "E";
+    } else if (statAverage < 59) {
+        qualityOfWork = "F";
+    }
 }
 
