@@ -91,43 +91,43 @@ let partySoundPlayed;
 let backgroundMusicPlayed;
 
 function preload() {
-    dayImg = loadImage('img/day1.PNG');
-    nightImg = loadImage('img/night1.PNG');
-    computerDayImg = loadImage('img/ComputerDay.PNG');
-    bedDayImg = loadImage('img/BedDay.PNG');
-    fridgeDayImg = loadImage('img/fridgeDay.PNG');
-    showerDayImg = loadImage('img/showerDay.PNG');
-    doorDayImg = loadImage('img/doorDay.PNG');
+    dayImg = loadImage('img/day1.png');
+    nightImg = loadImage('img/night1.png');
+    computerDayImg = loadImage('img/ComputerDay.png');
+    bedDayImg = loadImage('img/BedDay.png');
+    fridgeDayImg = loadImage('img/fridgeDay.png');
+    showerDayImg = loadImage('img/showerDay.png');
+    doorDayImg = loadImage('img/doorDay.png');
 
     //night 
-    computerNightImg = loadImage('img/laptopNight.PNG');
-    bedNightImg = loadImage('img/bedNight.PNG');
-    fridgeNightImg = loadImage('img/fridgeNight.PNG');
-    showerNightImg = loadImage('img/showerNight.PNG');
-    doorNightImg = loadImage('img/doorNight.PNG');
+    computerNightImg = loadImage('img/laptopNight.png');
+    bedNightImg = loadImage('img/bedNight.png');
+    fridgeNightImg = loadImage('img/fridgeNight.png');
+    showerNightImg = loadImage('img/showerNight.png');
+    doorNightImg = loadImage('img/doorNight.png');
 
     // character 
-    duckFront = loadImage('img/duckFront.PNG');
-    duckLeft = loadImage('img/duckLeft.PNG');
-    duckRight = loadImage('img/duckRight.PNG');
-    duckBack = loadImage('img/duckBack.PNG');
+    duckFront = loadImage('img/duckFront.png');
+    duckLeft = loadImage('img/duckLeft.png');
+    duckRight = loadImage('img/duckRight.png');
+    duckBack = loadImage('img/duckBack.png');
 
     // active 
-    socialActiveImgNight = loadImage('img/socialActiveNight.PNG');
-    socialActiveImgDay = loadImage('img/socialActiveDay.PNG');
-    bedActiveImgNight =loadImage('img/bedActiveNight.PNG');
-    bedActiveImgDay = loadImage('img/bedActiveDay.PNG');
-    fridgeActiveImgDay = loadImage('img/fridgeActiveDay.PNG');
-    fridgeActiveImgNight = loadImage('img/fridgeActiveNight.PNG');
-    laptopActiveImgDay = loadImage('img/laptopActiveDay.PNG');
-    laptopActiveImgNight = loadImage('img/laptopActiveNight.PNG');
+    socialActiveImgNight = loadImage('img/socialActiveNight.png');
+    socialActiveImgDay = loadImage('img/socialActiveDay.png');
+    bedActiveImgNight =loadImage('img/bedActiveNight.png');
+    bedActiveImgDay = loadImage('img/bedActiveDay.png');
+    fridgeActiveImgDay = loadImage('img/fridgeActiveDay.png');
+    fridgeActiveImgNight = loadImage('img/fridgeActiveNight.png');
+    laptopActiveImgDay = loadImage('img/laptopActiveDay.png');
+    laptopActiveImgNight = loadImage('img/laptopActiveNight.png');
 
     // action bar
-    partyHat = loadImage('img/partyHat.PNG');
-    laptop = loadImage('img/laptop.PNG');
-    sleepZ = loadImage('img/sleepZ.PNG');
-    apple = loadImage('img/apple.PNG');
-    showerHead = loadImage('img/showerHead.PNG');
+    partyHat = loadImage('img/partyHat.png');
+    laptop = loadImage('img/laptop.png');
+    sleepZ = loadImage('img/sleepZ.png');
+    apple = loadImage('img/apple.png');
+    showerHead = loadImage('img/showerHead.png');
 
     //sound
     typingFast = loadSound('sound/typingFast.mp3');
@@ -448,7 +448,7 @@ function mouseClicked() {
             page = 1;
             if(backgroundMusicPlayed === false) {
                 backgroundMusic.setVolume(0.2);
-                backgroundMusic.play();
+                backgroundMusic.loop();
                 backgroundMusicPlayed = true;
             }
         }
@@ -1253,11 +1253,11 @@ function drawEndPage() {
     textSize(14);
     textStyle(BOLD);
     text("The deadline has passed and completed work has been submitted.", 224, 263);
-    text("Here are your final grades:", 354, 287);
-    text("Essay 1:", 324, 327);
-    text("Project:", 324, 367);
-    text("Video Presentation:", 324, 407);
-    text("Essay 2:", 324, 447);
+    text("Here are your final grades:", 374, 287);
+    text("Essay 1:", 334, 327);
+    text("Project:", 334, 367);
+    text("Video Presentation:", 334, 407);
+    text("Essay 2:", 334, 447);
 
     var grade1Total = 0;
     var grade2Total = 0;
